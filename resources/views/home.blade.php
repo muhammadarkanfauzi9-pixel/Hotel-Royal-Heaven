@@ -9,10 +9,10 @@
         /* Custom styles jika diperlukan */
         .hero-bg {
             /* Pastikan gambar ini tersedia atau ganti dengan latar belakang yang sesuai */
-            background-image: url('{{ asset('public/user/GambarHeroSection.jpg') }}');
+            background-image: url('{{ asset('user/areakolam.jpg') }}');
             background-size: cover;
             background-position: center;
-        }
+        }   
     </style>
 </head>
 <body class="bg-white font-sans">
@@ -26,7 +26,7 @@
         <section class="relative w-full min-h-[730px] flex items-stretch">
     
     <div class="relative flex-1 min-h-[600px] bg-gray-200">
-        <img src="{{ asset('user/GambarHeroSection.jpg') }}" alt="Hotel Pool" class="absolute inset-0 w-full h-full object-cover" />
+        <img src="{{ asset('user/areakolam.jpg') }}" alt="Hotel Pool" class="absolute inset-0 w-full h-full object-cover" />
         <div class="absolute inset-0 bg-black bg-opacity-10"></div>
     </div>
     
@@ -58,6 +58,19 @@
         
 
         <hr class="max-w-7xl mx-auto">
+
+        <!-- About Section (A little about us) -->
+        <section id="about" class="w-full max-w-6xl mx-auto py-12 px-6 flex flex-col lg:flex-row items-center gap-12">
+            <div class="lg:w-1/2">
+                <h2 class="text-2xl font-bold mb-4"><span class="text-yellow-500">A little</span> <span class="text-blue-900">about us</span></h2>
+                <p class="text-gray-700 mb-6">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
+            </div>
+            <div class="lg:w-1/2 grid grid-cols-2 gap-4">
+                <div class="bg-gray-200 rounded-xl h-24"></div>
+                <div class="bg-gray-200 rounded-xl h-24"></div>
+                <div class="bg-gray-200 rounded-xl h-24 col-span-2"></div>
+            </div>
+        </section>
 
 
         <!-- Popular Rooms Section -->

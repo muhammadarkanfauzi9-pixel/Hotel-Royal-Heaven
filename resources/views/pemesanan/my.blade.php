@@ -9,7 +9,7 @@
                 <h1 class="text-3xl font-bold text-gray-800">Pemesanan Saya</h1>
                 <p class="text-gray-600 mt-1">Kelola semua pemesanan kamar Anda</p>
             </div>
-            <a href="{{ route('pemesanan.create') }}" class="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 px-6 rounded-lg transition-colors flex items-center gap-2">
+            <a href="{{ route('member.pemesanan.create') }}" class="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 px-6 rounded-lg transition-colors flex items-center gap-2">
                 <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path></svg>
                 Pesan Kamar
             </a>
@@ -99,7 +99,7 @@
                             @endif
 
                             <div class="flex gap-2">
-                                <a href="{{ route('pemesanan.show', $booking) }}" class="flex-1 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors text-center">
+                                <a href="{{ route('member.pemesanan.show', $booking) }}" class="flex-1 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors text-center">
                                     Lihat Detail
                                 </a>
                                 @if($booking->status_pemesanan == 'pending')
@@ -125,7 +125,7 @@
             <div class="bg-white rounded-lg shadow-md p-12 text-center">
                 <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm-1-8a1 1 0 112 0v3a1 1 0 11-2 0v-3z" clip-rule="evenodd"></path></svg>
                 <p class="text-gray-500 text-lg mb-6">Anda belum memiliki pemesanan</p>
-                <a href="{{ route('pemesanan.create') }}" class="inline-block bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 px-6 rounded-lg transition-colors">
+                <a href="{{ route('member.pemesanan.create') }}" class="inline-block bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 px-6 rounded-lg transition-colors">
                     Pesan Kamar Sekarang
                 </a>
             </div>

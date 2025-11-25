@@ -6,12 +6,12 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class EnsureAdmin
+class EnsureMember
 {
     public function handle(Request $request, Closure $next)
     {
         $user = Auth::user();
-        if (!$user || !$user->isAdmin()) {
+        if (!$user || $user->isAdmin()) {
             return redirect()->back()->with('error', 'Unauthorized access');
         }
 

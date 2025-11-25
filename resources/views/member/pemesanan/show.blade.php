@@ -1,4 +1,4 @@
-@extends(auth()->user()->isAdmin() ? 'layouts.admin' : 'layouts.app')
+@extends('layouts.app')
 
 @section('page_title', 'Detail Pemesanan')
 
@@ -113,7 +113,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                     <p class="text-xs text-gray-500 uppercase tracking-wide mb-2">Nama Pemesan</p>
-                    <p class="text-lg font-semibold text-gray-800">{{ $pemesanan->nama_pemesan ?? $pemesanan->user->nama_lengkap ?? $pemesanan->user->username }}</p>
+                    <p class="text-lg font-semibold text-gray-800">{{ $pemesanan->nama_pemesan ?? $pemesanan->user->name }}</p>
                 </div>
                 <div>
                     <p class="text-xs text-gray-500 uppercase tracking-wide mb-2">NIK</p>
@@ -172,42 +172,11 @@
             @endif
         </div>
 
-        <!-- Admin Actions -->
-        @if(auth()->user()->isAdmin() && $pemesanan->status_pemesanan != 'cancelled' && $pemesanan->status_pemesanan != 'completed')
-            <div class="bg-white rounded-lg shadow-md p-8 mb-6">
-                <h2 class="text-2xl font-bold text-gray-800 mb-4">Kelola Pemesanan</h2>
-                
-                <form method="POST" action="{{ route('admin.pemesanan.updateStatus', $pemesanan) }}" class="flex gap-3">
-                    @csrf
-                    
-                    <select 
-                        name="status_pemesanan" 
-                        class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
-                    >
-                        <option value="pending" @selected($pemesanan->status_pemesanan == 'pending')>Pending</option>
-                        <option value="confirmed" @selected($pemesanan->status_pemesanan == 'confirmed')>Confirmed</option>
-                        <option value="cancelled">Cancelled</option>
-                        <option value="completed" @selected($pemesanan->status_pemesanan == 'completed')>Completed</option>
-                    </select>
-                    
-                    <button type="submit" class="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 px-6 rounded-lg transition-colors">
-                        Simpan Perubahan
-                    </button>
-                </form>
-            </div>
-        @endif
-
         <!-- Back Button -->
         <div class="flex gap-3">
-            @if(auth()->user()->isAdmin())
-                <a href="{{ route('member.pemesanan.index') }}" class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-3 px-4 rounded-lg transition-colors text-center">
-                    Kembali ke Daftar Pemesanan
-                </a>
-            @else
-                <a href="{{ route('member.pemesanan.index') }}" class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-3 px-4 rounded-lg transition-colors text-center">
-                    Kembali ke Pemesanan Saya
-                </a>
-            @endif
+            <a href="{{ route('member.pemesanan.index') }}" class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-3 px-4 rounded-lg transition-colors text-center">
+                Kembali ke Pemesanan Saya
+            </a>
         </div>
     </div>
 @endsection

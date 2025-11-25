@@ -9,7 +9,7 @@
         <div class="bg-white rounded-lg shadow-md p-6">
             <h2 class="text-lg font-semibold text-gray-800 mb-4">Cari Pemesanan</h2>
             
-            <form method="GET" action="{{ route('pemesanan.index') }}" class="flex gap-3">
+            <form method="GET" action="{{ route('member.pemesanan.index') }}" class="flex gap-3">
                 <input 
                     type="text" 
                     name="search" 
@@ -20,7 +20,7 @@
                 <button type="submit" class="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 px-6 rounded-lg transition-colors">
                     Cari
                 </button>
-                <a href="{{ route('pemesanan.index') }}" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-6 rounded-lg transition-colors">
+                <a href="{{ route('member.pemesanan.index') }}" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-6 rounded-lg transition-colors">
                     Reset
                 </a>
             </form>
@@ -90,12 +90,12 @@
                                         </span>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-                                        <a href="{{ route('pemesanan.show', $p) }}" class="text-blue-600 hover:text-blue-900">
+                                        <a href="{{ route('member.pemesanan.show', $p) }}" class="text-blue-600 hover:text-blue-900">
                                             Lihat
                                         </a>
                                         
                                         @if($p->status_pemesanan != 'cancelled' && $p->status_pemesanan != 'completed')
-                                            <form method="POST" action="{{ route('pemesanan.updateStatus', $p) }}" class="inline">
+                                            <form method="POST" action="{{ route('admin.pemesanan.updateStatus', $p) }}" class="inline">
                                                 @csrf
                                                 <select 
                                                     name="status_pemesanan" 

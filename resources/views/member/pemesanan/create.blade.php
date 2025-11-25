@@ -108,7 +108,7 @@
                             name="nama" 
                             required
                             placeholder="Masukkan nama lengkap"
-                            value="{{ old('nama', auth()->user()->nama_lengkap) }}"
+                            value="{{ old('nama', auth()->user()->name) }}"
                             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 @error('nama') border-red-500 @enderror"
                         >
                         @error('nama')

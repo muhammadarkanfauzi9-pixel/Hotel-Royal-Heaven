@@ -19,6 +19,6 @@ class IsAdmin
             return $next($request);
         }
 
-        return redirect()->route('home')->with('error', 'Unauthorized access');
+        return redirect()->route('landing')->with('error', 'Unauthorized access');
     }
 }

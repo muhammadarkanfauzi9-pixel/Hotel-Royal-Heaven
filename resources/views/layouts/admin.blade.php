@@ -72,7 +72,7 @@
                     Manajemen Kamar
                 </a>
 
-                <a href="{{ route('pemesanan.index') }}" class="nav-item @if(request()->routeIs('pemesanan.*')) active @endif">
+                <a href="{{ route('admin.pemesanan.index') }}" class="nav-item @if(request()->routeIs('admin.pemesanan.*')) active @endif">
                     <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm-1-8a1 1 0 112 0v3a1 1 0 11-2 0v-3z" clip-rule="evenodd"></path></svg>
                     Pemesanan
                 </a>

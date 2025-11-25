@@ -31,54 +31,8 @@
 </head>
 <body class="bg-gray-50">
 
-    <!-- Hero Logo & Navbar -->
-    <div class="relative">
-        <!-- Logo Card Floating -->
-        <div class="absolute left-0 top-0 z-20" style="transform: translateY(-32px);">
-            <div class="bg-white rounded-xl shadow-lg px-6 py-4 flex flex-col items-center" style="width:120px;">
-                <img src="{{ asset('user/logo-royal-heaven.png') }}" alt="Royal Heaven Logo" class="w-12 mb-2">
-                <div class="text-xs text-gray-700 font-semibold text-center">ROYAL HEAVEN<br><span class="font-normal">Hotel & Resort</span><br><span class="text-[10px]">Est. 1999</span></div>
-            </div>
-        </div>
-        <!-- Diagonal Yellow Background -->
-        <div class="absolute left-0 top-0 w-64 h-48 z-10" style="clip-path: polygon(0 0, 100% 0, 80% 100%, 0% 100%); background: #ffb833;"></div>
-        <!-- Navbar -->
-        <nav class="relative z-30 flex justify-center pt-8">
-            <div class="bg-white rounded-full shadow-lg flex px-2 py-2 gap-2 w-[900px] max-w-full">
-                <a href="{{ route('landing') }}" class="relative px-6 py-2 font-semibold text-gray-900 transition-colors @if(request()->routeIs('landing')) text-yellow-600 @endif">
-                    Home
-                    @if(request()->routeIs('landing'))
-                        <span class="absolute left-1/2 -bottom-1.5 -translate-x-1/2 w-20 h-1 bg-yellow-400 rounded-full"></span>
-                    @endif
-                </a>
-                <a href="{{ route('home') }}" class="relative px-6 py-2 font-semibold text-gray-900 transition-colors @if(request()->routeIs('home')) text-yellow-600 @endif">
-                    Daftar Kamar
-                    @if(request()->routeIs('home'))
-                        <span class="absolute left-1/2 -bottom-1.5 -translate-x-1/2 w-20 h-1 bg-yellow-400 rounded-full"></span>
-                    @endif
-                </a>
-                <a href="{{ route('pemesanan.create') }}" class="relative px-6 py-2 font-semibold text-gray-900 transition-colors @if(request()->routeIs('pemesanan.create')) text-yellow-600 @endif">
-                    Pesan Kamar
-                    @if(request()->routeIs('pemesanan.create'))
-                        <span class="absolute left-1/2 -bottom-1.5 -translate-x-1/2 w-20 h-1 bg-yellow-400 rounded-full"></span>
-                    @endif
-                </a>
-                <a href="{{ route('pemesanan.my') }}" class="relative px-6 py-2 font-semibold text-gray-900 transition-colors @if(request()->routeIs('pemesanan.my')) text-yellow-600 @endif">
-                    Riwayat
-                    @if(request()->routeIs('pemesanan.my'))
-                        <span class="absolute left-1/2 -bottom-1.5 -translate-x-1/2 w-20 h-1 bg-yellow-400 rounded-full"></span>
-                    @endif
-                </a>
-                <a href="{{ route('about') }}" class="relative px-6 py-2 font-semibold text-gray-900 transition-colors @if(request()->routeIs('about')) text-yellow-600 @endif">
-                    About Us
-                    @if(request()->routeIs('about'))
-                        <span class="absolute left-1/2 -bottom-1.5 -translate-x-1/2 w-20 h-1 bg-yellow-400 rounded-full"></span>
-                    @endif
-                </a>
-                <!-- Tambahkan menu lain jika perlu -->
-            </div>
-        </nav>
-    </div>
+    <!-- Gunakan header komponen agar konsisten di semua halaman user -->
+    @include('components.header')
 
     <!-- Main Content -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 mt-8">
@@ -126,9 +80,9 @@
                 <div>
                     <h4 class="text-lg font-bold mb-4">Navigasi</h4>
                     <ul class="space-y-2 text-gray-400">
-                        <li><a href="{{ route('home') }}" class="hover:text-white transition">Daftar Kamar</a></li>
+                        <li><a href="{{ route('kamar.index') }}" class="hover:text-white transition">Daftar Kamar</a></li>
                         @if(auth()->check())
-                            <li><a href="{{ route('pemesanan.my') }}" class="hover:text-white transition">Pemesanan Saya</a></li>
+                            <li><a href="{{ route('member.pemesanan.index') }}" class="hover:text-white transition">Pemesanan Saya</a></li>
                         @endif
                     </ul>
                 </div>

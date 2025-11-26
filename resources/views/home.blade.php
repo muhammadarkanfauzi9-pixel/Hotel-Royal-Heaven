@@ -8,7 +8,6 @@
     <style>
         /* Custom styles jika diperlukan */
         .hero-bg {
-            /* Pastikan gambar ini tersedia atau ganti dengan latar belakang yang sesuai */
             background-image: url('{{ asset('user/areakolam.jpg') }}');
             background-size: cover;
             background-position: center;
@@ -18,8 +17,8 @@
 <body class="bg-white font-sans">
 
     {{-- Header dipisah ke komponen --}}
-    @include('components.header')
-
+    @include('components.Header')
+  
 
     <main>
         <!-- Hero Section -->
@@ -61,16 +60,38 @@
 
         <!-- About Section (A little about us) -->
         <section id="about" class="w-full max-w-6xl mx-auto py-12 px-6 flex flex-col lg:flex-row items-center gap-12">
-            <div class="lg:w-1/2">
-                <h2 class="text-2xl font-bold mb-4"><span class="text-yellow-500">A little</span> <span class="text-blue-900">about us</span></h2>
-                <p class="text-gray-700 mb-6">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
-            </div>
-            <div class="lg:w-1/2 grid grid-cols-2 gap-4">
-                <div class="bg-gray-200 rounded-xl h-24"></div>
-                <div class="bg-gray-200 rounded-xl h-24"></div>
-                <div class="bg-gray-200 rounded-xl h-24 col-span-2"></div>
-            </div>
-        </section>
+    <div class="lg:w-1/2">
+        <h2 class="text-2xl font-bold mb-4"><span class="text-black-500">A</span><span class="text-yellow-500"> little</span> <span class="text-black-500">about us</span></h2>
+        <p class="text-gray-700 mb-6">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
+    </div>
+    <div class="lg:w-1/2 grid grid-cols-2 gap-4">
+        
+        <div class="bg-gray-200 rounded-xl h-24 overflow-hidden">
+            <img 
+                src="user/ruangkiri.jpg" 
+                alt="Hotel Interior 1" 
+                class="w-full h-full object-cover"
+            >
+        </div>
+        
+        <div class="bg-gray-200 rounded-xl h-24 overflow-hidden">
+            <img 
+                src="user/ruangkanan.jpg" 
+                alt="Hotel Room" 
+                class="w-full h-full object-cover"
+            >
+        </div>
+        
+        <div class="bg-gray-200 rounded-xl h-24 col-span-2 overflow-hidden">
+            <img 
+                src="user/fotoblokbawah.avif" 
+                alt="Hotel Exterior" 
+                class="w-full h-full object-cover"
+            >
+        </div>
+        
+    </div>
+</section>
 
 
         <!-- Popular Rooms Section -->
@@ -95,7 +116,7 @@
                 @endfor
             </div>
         </section>
-
+      
     </main>
 
     </body>

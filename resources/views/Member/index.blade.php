@@ -1,40 +1,40 @@
-<<<<<<< HEAD
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Royal Hotels - Dashboard</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        /* Custom styles jika diperlukan */
-        .hero-bg {
-            background-image: url('{{ asset('user/areakolam.jpg') }}');
-            background-size: cover;
-            background-position: center;
-        }   
-    </style>
-=======
 @extends('layouts.app')
 
 @section('page_title', 'Home')
 
 @section('content')
->>>>>>> origin/main
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-6">Welcome to Royal Heaven Hotel</h1>
+    <!-- Home page content here -->
+</div>
+@endsection
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@yield('page_title', 'Hotel Royal Heaven')</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .hero-section {
+            background-image: url('{{ asset('public/user/GambarHeroSection.jpg') }}');
+            background-size: cover;
+            background-position: center;
+        }
+    </style>
 </head>
 <body class="bg-white font-sans">
 
     {{-- Header dipisah ke komponen --}}
-<<<<<<< HEAD
-    @include('components.Header')
-  
+    @include('components.Navbar')
+
 
     <main>
         <!-- Hero Section -->
         <section class="relative w-full min-h-[730px] flex items-stretch">
     
     <div class="relative flex-1 min-h-[600px] bg-gray-200">
-        <img src="{{ asset('user/areakolam.jpg') }}" alt="Hotel Pool" class="absolute inset-0 w-full h-full object-cover" />
+        <img src="{{ asset('user/GambarHeroSection.jpg') }}" alt="Hotel Pool" class="absolute inset-0 w-full h-full object-cover" />
         <div class="absolute inset-0 bg-black bg-opacity-10"></div>
     </div>
     
@@ -63,48 +63,9 @@
         </div>
     </div>
 </section>
-=======
-    @include('components.Navbar')
-    @include('components.hero-section')
->>>>>>> origin/main
         
 
         <hr class="max-w-7xl mx-auto">
-
-        <!-- About Section (A little about us) -->
-        <section id="about" class="w-full max-w-6xl mx-auto py-12 px-6 flex flex-col lg:flex-row items-center gap-12">
-    <div class="lg:w-1/2">
-        <h2 class="text-2xl font-bold mb-4"><span class="text-black-500">A</span><span class="text-yellow-500"> little</span> <span class="text-black-500">about us</span></h2>
-        <p class="text-gray-700 mb-6">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
-    </div>
-    <div class="lg:w-1/2 grid grid-cols-2 gap-4">
-        
-        <div class="bg-gray-200 rounded-xl h-24 overflow-hidden">
-            <img 
-                src="user/ruangkiri.jpg" 
-                alt="Hotel Interior 1" 
-                class="w-full h-full object-cover"
-            >
-        </div>
-        
-        <div class="bg-gray-200 rounded-xl h-24 overflow-hidden">
-            <img 
-                src="user/ruangkanan.jpg" 
-                alt="Hotel Room" 
-                class="w-full h-full object-cover"
-            >
-        </div>
-        
-        <div class="bg-gray-200 rounded-xl h-24 col-span-2 overflow-hidden">
-            <img 
-                src="user/fotoblokbawah.avif" 
-                alt="Hotel Exterior" 
-                class="w-full h-full object-cover"
-            >
-        </div>
-        
-    </div>
-</section>
 
 
         <!-- Popular Rooms Section -->
@@ -129,7 +90,7 @@
                 @endfor
             </div>
         </section>
-      
+
     </main>
 
     </body>

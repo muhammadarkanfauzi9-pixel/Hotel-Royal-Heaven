@@ -4,123 +4,44 @@ namespace App\Http\Controllers;
 
 use App\Models\Kamar;
 use App\Models\TipeKamar;
-use App\Models\Pemesanan;
-use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\View\View; // Tambahkan untuk type hinting
 
 class KamarController extends Controller
 {
-    // Dashboard - only accessible to admins
-    public function dashboard()
+    /**
+     * Tampilkan daftar kamar untuk halaman manajemen (Admin).
+     */
+    public function index(): View
     {
-        $totalKamar = Kamar::count();
-        $kamarTersedia = Kamar::where('status_ketersediaan', 'available')->count();
-        $totalPemesanan = Pemesanan::count();
-        $totalMember = User::where('level', 'member')->count();
-        $recentBookings = Pemesanan::with(['user', 'kamar'])->latest('tgl_pemesanan')->take(5)->get();
-
-        return view('admin.index', compact(
-            'totalKamar',
-            'kamarTersedia',
-            'totalPemesanan',
-            'totalMember',
-            'recentBookings'
-        ));
+        $kamar = Kamar::with('tipeKamar')->get();
+        $tipeKamar = TipeKamar::all();
+        
+        // Asumsi view untuk admin adalah kamar.index
+        return view('kamar.index', compact('kamar', 'tipeKamar'));
     }
 
-    // List kamar (for both admin and members)
-    public function index(Request $request)
+    /**
+     * Tampilkan halaman landing/utama dengan kamar unggulan (Public Route: /).
+     */
+    public function landing(): View
     {
-        $query = Kamar::with('tipe');
-
-        if ($request->filled('type')) {
-            $query->whereHas('tipe', function($q) use ($request){
-                $q->where('nama_tipe', 'like', '%'.$request->input('type').'%');
-            });
-        }
-
-        if ($request->filled('status')) {
-            $query->where('status_ketersediaan', $request->input('status'));
-        }
-
-        if ($request->filled('price_min')) {
-            $query->whereHas('tipe', function($q) use ($request){
-                $q->where('harga_dasar', '>=', $request->input('price_min'));
-            });
-        }
-
-        if ($request->filled('price_max')) {
-            $query->whereHas('tipe', function($q) use ($request){
-                $q->where('harga_dasar', '<=', $request->input('price_max'));
-            });
-        }
-
-        $kamars = $query->paginate(12)->withQueryString();
-        $kamarsAll = $query->get();
-        $tipeKamars = TipeKamar::all();
-
-        return view('kamar.index', compact('kamars', 'kamarsAll', 'tipeKamars'));
-    }
-
-    // Landing page with featured rooms
-    public function landing()
-    {
-        // Fetch 3 most recent available rooms to feature on landing
-        $featuredRooms = Kamar::with('tipe')
-            ->where('status_ketersediaan', 'available')
-            ->latest('id_kamar')
-            ->take(3)
-            ->get();
-
-        return view('home', compact('featuredRooms'));
-    }
-
-    // Create form (admin only)
-    public function create()
-    {
-        $tipe = TipeKamar::all();
-        return view('kamar.create', compact('tipe'));
-    }
-
-    // Store kamar (admin only)
-    public function store(Request $request)
-    {
-        $data = $request->validate([
-            'nomor_kamar' => 'required|string|unique:kamar,nomor_kamar',
-            'id_tipe' => 'required|exists:tipe_kamar,id_tipe',
-            'deskripsi' => 'nullable|string|max:500',
-            'status_ketersediaan' => 'required|in:available,booked,maintenance',
+        // 1. Ambil data yang ingin ditampilkan di halaman depan.
+        // Contoh: Ambil 4 kamar yang tersedia.
+        $featured_kamar = Kamar::where('status_ketersediaan', 'available')
+                                ->with('tipeKamar') // Eager load relasi tipe kamar
+                                ->limit(4) 
+                                ->get();
+        
+        // 2. Tampilkan view halaman utama (asumsi nama view-nya 'landing' atau 'welcome')
+        // Sesuaikan nama view ini dengan nama file Anda di resources/views/
+        return view('home', [
+            'featured_kamar' => $featured_kamar // Kirim data kamar unggulan
         ]);
-
-        Kamar::create($data);
-        return redirect()->route('kamar.index')->with('success', 'Kamar berhasil ditambahkan.');
+        
+        // Jika nama file Anda adalah resources/views/welcome.blade.php, ganti 'landing' menjadi 'welcome'.
+        // Jika nama file Anda adalah resources/views/pages/landing.blade.php, ganti 'landing' menjadi 'pages.landing'.
     }
 
-    // Edit form (admin only)
-    public function edit(Kamar $kamar)
-    {
-        $tipe = TipeKamar::all();
-        return view('kamar.edit', compact('kamar', 'tipe'));
-    }
-
-    // Update kamar (admin only)
-    public function update(Request $request, Kamar $kamar)
-    {
-        $data = $request->validate([
-            'nomor_kamar' => 'required|string|unique:kamar,nomor_kamar,'.$kamar->id_kamar.',id_kamar',
-            'id_tipe' => 'required|exists:tipe_kamar,id_tipe',
-            'deskripsi' => 'nullable|string|max:500',
-            'status_ketersediaan' => 'required|in:available,booked,maintenance',
-        ]);
-
-        $kamar->update($data);
-        return redirect()->route('kamar.index')->with('success', 'Kamar berhasil diperbarui.');
-    }
-
-    // Delete kamar (admin only)
-    public function destroy(Kamar $kamar)
-    {
-        $kamar->delete();
-        return redirect()->route('kamar.index')->with('success', 'Kamar berhasil dihapus.');
-    }
+    // Tempatkan method resource lainnya (create, store, edit, update, destroy) di sini...
 }

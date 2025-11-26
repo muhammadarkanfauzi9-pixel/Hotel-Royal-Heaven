@@ -103,15 +103,77 @@
                                     Lihat Detail
                                 </a>
                                 @if($booking->status_pemesanan == 'pending')
-                                    <button 
-                                        type="button" 
-                                        onclick="if(confirm('Batalkan pemesanan ini?')) cancelBooking({{ $booking->id_pemesanan }})"
-                                        class="flex-1 bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors"
-                                    >
-                                        Batalkan
-                                    </button>
+                                    <form method="POST" action="{{ route('pemesanan.cancel', $booking) }}" onsubmit="return confirm('Batalkan pemesanan ini?')" class="flex-1">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button 
+                                            type="submit"
+                                            class="w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors"
+                                        >
+                                            Batalkan
+                                        </button>
+                                    </form>
                                 @endif
                             </div>
+
+                            {{-- Review Section --}}
+                            @if($booking->status_pemesanan == 'completed')
+                            <div class="mt-6 pt-4 border-t border-gray-200">
+                                @if(in_array($booking->id_kamar, $reviewedKamarIds))
+                                    <div class="text-sm text-center text-gray-600 bg-gray-50 p-4 rounded-lg">
+                                        <p class="font-semibold">Anda sudah memberi review untuk kamar ini.</p>
+                                        <p>Terima kasih atas masukan Anda!</p>
+                                    </div>
+                                @else
+                                    <h4 class="text-lg font-semibold text-gray-800 mb-3">Tulis Review Anda</h4>
+                                    
+                                    @if(session('success'))
+                                        <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4 rounded-md" role="alert">
+                                            <p>{{ session('success') }}</p>
+                                        </div>
+                                    @endif
+                                    @if(session('error'))
+                                        <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 rounded-md" role="alert">
+                                            <p>{{ session('error') }}</p>
+                                        </div>
+                                    @endif
+
+                                    <form action="{{ route('reviews.store') }}" method="POST" class="space-y-4">
+                                        @csrf
+                                        <input type="hidden" name="id_kamar" value="{{ $booking->id_kamar }}">
+                                        
+                                        <div>
+                                            <label for="rating-{{$booking->id_pemesanan}}" class="block text-sm font-medium text-gray-700 mb-1">Rating</label>
+                                            <div class="flex items-center gap-2">
+                                                @for ($i = 1; $i <= 5; $i++)
+                                                    <input type="radio" id="rating-{{$booking->id_pemesanan}}-{{$i}}" name="rating" value="{{$i}}" class="form-radio h-5 w-5 text-yellow-500" required>
+                                                    <label for="rating-{{$booking->id_pemesanan}}-{{$i}}">{{$i}}</label>
+                                                @endfor
+                                            </div>
+                                            @error('rating') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                                        </div>
+
+                                        <div>
+                                            <label for="komentar-{{$booking->id_pemesanan}}" class="block text-sm font-medium text-gray-700">Komentar (Opsional)</label>
+                                            <textarea 
+                                                id="komentar-{{$booking->id_pemesanan}}"
+                                                name="komentar" 
+                                                rows="3" 
+                                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-yellow-500 focus:ring-yellow-500 sm:text-sm" 
+                                                placeholder="Bagaimana pengalaman menginap Anda?"
+                                            ></textarea>
+                                            @error('komentar') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                                        </div>
+
+                                        <div>
+                                            <button type="submit" class="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors">
+                                                Kirim Review
+                                            </button>
+                                        </div>
+                                    </form>
+                                @endif
+                            </div>
+                            @endif
                         </div>
                     </div>
                 @endforeach

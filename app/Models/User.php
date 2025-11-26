@@ -57,6 +57,16 @@ class User extends Authenticatable
         return $this->hasMany(\App\Models\Pemesanan::class, 'id_user', 'id');
     }
 
+    public function reviews()
+    {
+        return $this->hasMany(Review::class, 'id_user', 'id');
+    }
+
+    public function wishlists()
+    {
+        return $this->hasMany(Wishlist::class, 'id_user', 'id');
+    }
+
     public function isAdmin(): bool
     {
         return ($this->level ?? '') === 'admin';

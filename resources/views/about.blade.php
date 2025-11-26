@@ -1,5 +1,6 @@
 @extends('layouts.app')
 @section('page_title', 'About Us')
+@include('components.hero-section')
 @section('content')
 <div class="max-w-4xl mx-auto py-16">
     <h1 class="text-4xl font-bold text-blue-900 mb-6">About Royal Heaven Hotel</h1>

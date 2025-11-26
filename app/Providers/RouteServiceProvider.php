@@ -19,6 +19,11 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Custom binding for 'pemesanan' to use 'id_pemesanan' column
+        Route::bind('pemesanan', function ($value) {
+            return \App\Models\Pemesanan::where('id_pemesanan', $value)->firstOrFail();
+        });
+
         $this->routes(function () {
             Route::middleware('api')
                 ->prefix('api')

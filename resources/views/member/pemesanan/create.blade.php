@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('page_title', 'Form Pemesanan Kamar')
-
+@include('components.hero-section')
 @section('content')
     <div class="max-w-3xl mx-auto">
         <div class="bg-white rounded-lg shadow-md p-8 mb-8">
@@ -10,7 +10,13 @@
                 <p class="text-gray-600">Isi form di bawah untuk melakukan pemesanan kamar</p>
             </div>
 
-            <form action="{{ route('member.pemesanan.store') }}" method="POST" class="space-y-6">
+            @if(!empty($noRoomsAvailable))
+                <div class="mb-6 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                    Tidak ada kamar yang tersedia untuk dipesan saat ini.
+                </div>
+            @endif
+
+            <form action="{{ route('pemesanan.store') }}" method="POST" class="space-y-6">
                 @csrf
 
                 <!-- Pilih Kamar -->
@@ -27,6 +33,7 @@
                             required
                             onchange="updateRoomPrice()"
                             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 @error('id_kamar') border-red-500 @enderror"
+                            @if(!empty($noRoomsAvailable)) disabled @endif
                         >
                             <option value="">-- Pilih Kamar --</option>
                             @foreach($kamars as $kamar)
@@ -63,6 +70,7 @@
                                 value="{{ old('tgl_check_in') }}"
                                 min="{{ date('Y-m-d') }}"
                                 class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 @error('tgl_check_in') border-red-500 @enderror"
+                                @if(!empty($noRoomsAvailable)) disabled @endif
                             >
                             @error('tgl_check_in')
                                 <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
@@ -81,6 +89,7 @@
                                 onchange="calculateDays()"
                                 value="{{ old('tgl_check_out') }}"
                                 class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 @error('tgl_check_out') border-red-500 @enderror"
+                                @if(!empty($noRoomsAvailable)) disabled @endif
                             >
                             @error('tgl_check_out')
                                 <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
@@ -108,8 +117,9 @@
                             name="nama" 
                             required
                             placeholder="Masukkan nama lengkap"
-                            value="{{ old('nama', auth()->user()->name) }}"
+                            value="{{ old('nama', auth()->user()->nama_lengkap) }}"
                             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 @error('nama') border-red-500 @enderror"
+                            @if(!empty($noRoomsAvailable)) disabled @endif
                         >
                         @error('nama')
                             <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
@@ -129,6 +139,7 @@
                             placeholder="Masukkan nomor identitas (KTP/Paspor)"
                             value="{{ old('nik', auth()->user()->nik) }}"
                             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 @error('nik') border-red-500 @enderror"
+                            @if(!empty($noRoomsAvailable)) disabled @endif
                         >
                         @error('nik')
                             <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
@@ -148,6 +159,7 @@
                             placeholder="Masukkan nomor telepon aktif"
                             value="{{ old('nohp', auth()->user()->nohp) }}"
                             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 @error('nohp') border-red-500 @enderror"
+                            @if(!empty($noRoomsAvailable)) disabled @endif
                         >
                         @error('nohp')
                             <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
@@ -166,6 +178,7 @@
                             name="pilihan_pembayaran" 
                             required
                             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 @error('pilihan_pembayaran') border-red-500 @enderror"
+                            @if(!empty($noRoomsAvailable)) disabled @endif
                         >
                             <option value="">-- Pilih Metode Pembayaran --</option>
                             <option value="cash" @selected(old('pilihan_pembayaran') == 'cash')>Tunai</option>
@@ -187,6 +200,7 @@
                             placeholder="Tulis catatan khusus jika ada (misalnya kebutuhan khusus, permintaan kamar)"
                             rows="3"
                             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 @error('catatan') border-red-500 @enderror"
+                            @if(!empty($noRoomsAvailable)) disabled @endif
                         >{{ old('catatan') }}</textarea>
                         @error('catatan')
                             <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
@@ -199,11 +213,12 @@
                     <button 
                         type="submit" 
                         class="flex-1 bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200"
+                        @if(!empty($noRoomsAvailable)) disabled @endif
                     >
                         Lanjutkan Pemesanan
                     </button>
                     <a 
-                        href="{{ route('kamar.index') }}" 
+                        href="{{ route('home') }}" 
                         class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-3 px-4 rounded-lg transition-colors duration-200 text-center"
                     >
                         Batal

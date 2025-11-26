@@ -31,8 +31,15 @@
 </head>
 <body class="bg-gray-50">
 
+<<<<<<< HEAD
     <!-- Gunakan header komponen agar konsisten di semua halaman user -->
     @include('components.header')
+=======
+    <!-- Hero Logo & Navbar -->
+    <div class="relative">
+        @include('components.Navbar')
+    </div>
+>>>>>>> origin/main
 
     <!-- Main Content -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 mt-8">

@@ -1,61 +1,100 @@
-<?php
+{
+    // ... existing methods here ...
 
-namespace App\Http\Controllers;
+    /**
+     * Handle Midtrans payment notification webhook callback
+     */
+    public function midtransNotification(Request $request)
+    {
+        // Configure Midtrans
+        \Midtrans\Config::$serverKey = config('services.midtrans.server_key');
+        \Midtrans\Config::$isProduction = config('services.midtrans.is_production');
+        \Midtrans\Config::$isSanitized = true;
+        \Midtrans\Config::$is3ds = true;
 
-use App\Models\Pemesanan;
-use App\Models\Kamar;
-use App\Models\Review;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Carbon\Carbon; // Menggunakan Carbon secara eksplisit
-use Illuminate\Support\Facades\Validator;
+        $notif = new \Midtrans\Notification();
 
+        // Get order_id from Midtrans notification
+        $orderId = $notif->order_id ?? null;
+        $transactionStatus = $notif->transaction_status ?? null;
+        $fraudStatus = $notif->fraud_status ?? null;
+        $paymentType = $notif->payment_type ?? null;
+
+        if (!$orderId) {
+            return response('Invalid notification', 400);
+        }
+
+        // Find the booking record
+        $pemesanan = Pemesanan::where('kode_pemesanan', $orderId)->first();
+
+        if (!$pemesanan) {
+            return response('Booking not found', 404);
+        }
+
+        // Update booking status based on Midtrans transaction status
+        if ($transactionStatus == 'capture') {
+            if ($paymentType == 'credit_card') {
+                if ($fraudStatus == 'challenge') {
+                    // Payment challenge
+                    $pemesanan->payment_status = 'challenge';
+                    $pemesanan->status_pemesanan = 'pending';
+                } else {
+                    // Payment success
+                    $pemesanan->payment_status = 'paid';
+                    $pemesanan->status_pemesanan = 'confirmed';
+                }
+            }
+        } elseif ($transactionStatus == 'settlement') {
+            // Payment success
+            $pemesanan->payment_status = 'paid';
+            $pemesanan->status_pemesanan = 'confirmed';
+        } elseif ($transactionStatus == 'pending') {
+            $pemesanan->payment_status = 'pending';
+            $pemesanan->status_pemesanan = 'pending';
+        } elseif (in_array($transactionStatus, ['deny', 'expire', 'cancel'])) {
+            $pemesanan->payment_status = 'failed';
+            $pemesanan->status_pemesanan = 'cancelled';
+
+            // Mark room as available again
+            if ($pemesanan->kamar) {
+                $pemesanan->kamar->status_ketersediaan = 'available';
+                $pemesanan->kamar->save();
+            }
+        }
+
+        $pemesanan->save();
+
+        return response('OK', 200);
+    }
+}
+=======
 class PemesananController extends Controller
 {
-    // Tampilkan form untuk membuat pemesanan baru
+    // Show form to create new booking
     public function create(Request $request)
     {
         $roomId = $request->query('room_id');
         $kamar = null;
-        
-        // Cari kamar spesifik yang tersedia berdasarkan ID dari query string
         if ($roomId) {
             $kamar = Kamar::where('id', $roomId)
                 ->where('status_ketersediaan', 'available')
                 ->first();
         }
 
-        // Jika kamar spesifik tidak ditemukan atau ID tidak ada, ambil kamar tersedia pertama
         if (!$kamar) {
             $kamar = Kamar::where('status_ketersediaan', 'available')->first();
         }
 
-        // Jika tidak ada kamar yang tersedia sama sekali
         if (!$kamar) {
-            // Instead of redirect, prepare an empty rooms list and show info message in blade
-            $kamars = collect(); // empty collection
-            $selectedKamarId = null;
-
-            return view('Member.pemesanan.create', [
-                'kamars' => $kamars,
-                'selectedKamarId' => $selectedKamarId,
-                'noRoomsAvailable' => true,
-            ]);
+            return redirect()->route('home')->with('error', 'Tidak ada kamar tersedia untuk dipesan.');
         }
 
-        // Ambil semua kamar yang tersedia untuk form select
-        $kamars = Kamar::where('status_ketersediaan', 'available')->with('tipe')->get();
-
-        $selectedKamarId = $kamar->id;
-
-        // View dipanggil dari resources/views/Member/pemesanan/create.blade.php
-        return view('Member.pemesanan.create', [
-            'kamars' => $kamars,
-            'selectedKamarId' => $selectedKamarId,
+        return view('pemesanan.create', [
+            'kamar' => $kamar
         ]);
     }
 
-    // Simpan pemesanan baru
+    // Store new booking
     public function store(Request $request)
     {
         $rules = [
@@ -69,7 +108,7 @@ class PemesananController extends Controller
             'catatan' => 'nullable|string|max:500'
         ];
 
-        $validator = Validator::make($request->all(), $rules);
+        $validator = \Validator::make($request->all(), $rules);
 
         if ($validator->fails()) {
             return redirect()->back()
@@ -77,36 +116,22 @@ class PemesananController extends Controller
                 ->withInput();
         }
 
-        // 1. Ambil kamar dengan relasi 'tipe' untuk mengambil harga (Eager Loading)
-        $kamar = Kamar::with('tipe')->findOrFail($request->id_kamar);
+        $kamar = Kamar::findOrFail($request->id_kamar);
 
-        // 2. Pengecekan Konflik Tanggal yang Kuat
-        // Memeriksa apakah ada pemesanan 'pending' atau 'confirmed' yang bertabrakan tanggalnya
-        $isConflict = Pemesanan::where('id_kamar', $request->id_kamar)
-            ->whereIn('status_pemesanan', ['pending', 'confirmed']) 
-            ->where(function ($query) use ($request) {
-                $query->where(function ($q) use ($request) {
-                    $q->where('tgl_check_in', '<', $request->tgl_check_out)
-                      ->where('tgl_check_out', '>', $request->tgl_check_in);
-                });
-            })
-            ->exists();
-
-        if ($isConflict) {
-            return redirect()->back()->with('error', 'Kamar ini sudah dipesan untuk tanggal tersebut.');
+        if ($kamar->status_ketersediaan != 'available') {
+            return redirect()->back()->with('error', 'Kamar tidak tersedia untuk periode yang dipilih.');
         }
-        
-        $checkIn = Carbon::parse($request->tgl_check_in);
-        $checkOut = Carbon::parse($request->tgl_check_out);
+
+        $checkIn = \Carbon\Carbon::parse($request->tgl_check_in);
+        $checkOut = \Carbon\Carbon::parse($request->tgl_check_out);
         $totalMalam = $checkIn->diffInDays($checkOut);
 
-        // Akses harga melalui relasi 'tipe'
-        $hargaPerMalam = $kamar->tipe->harga_dasar ?? $kamar->harga ?? 0; 
+        $hargaPerMalam = $kamar->tipe->harga_dasar ?? 0;
         $totalHarga = $hargaPerMalam * $totalMalam;
 
         $kodePemesanan = 'INV'.strtoupper(uniqid());
 
-        // Membuat objek pemesanan
+        // Create booking
         $pemesanan = new Pemesanan();
         $pemesanan->id_user = Auth::id();
         $pemesanan->id_kamar = $kamar->id;
@@ -124,13 +149,14 @@ class PemesananController extends Controller
         $pemesanan->status_pemesanan = 'pending';
         $pemesanan->payment_status = 'pending';
 
-        // Simpan pemesanan
+        // Save booking
         $pemesanan->save();
 
-        // ⚠️ LOGIKA STATUS KAMAR BERDASARKAN KETERSEDIAAN DIHAPUS 
-        // Karena ketersediaan ditangani oleh pengecekan konflik tanggal yang lebih kuat di atas.
+        // Set room unavailable
+        $kamar->status_ketersediaan = 'booked';
+        $kamar->save();
 
-        // Generate Midtrans Snap Token jika pilihan pembayaran bukan tunai
+        // Generate Midtrans Snap Token if payment method is not cash
         $snapToken = null;
         if ($pemesanan->pilihan_pembayaran != 'cash') {
             $midtransParams = [
@@ -160,44 +186,39 @@ class PemesananController extends Controller
         }
 
         if ($snapToken) {
-            // View pemesanan.payment (kemungkinan di resources/views/pemesanan/payment.blade.php)
             return view('pemesanan.payment', [
                 'pemesanan' => $pemesanan,
                 'snapToken' => $snapToken,
             ]);
         } else {
-            // Untuk pembayaran tunai, redirect ke daftar pemesanan pengguna
+            // For cash payment, redirect to user's bookings list
             return redirect()->route('pemesanan.my')->with('success', 'Pemesanan berhasil dibuat. Silakan lakukan pembayaran tunai saat check-in.');
         }
     }
 
-    // Daftar pemesanan pengguna
+    // User's bookings list
     public function myBookings()
     {
         $userId = Auth::id();
         $pemesanan = Pemesanan::where('id_user', $userId)
-            ->with('kamar') // Eager load kamar untuk tampilan
             ->orderBy('tgl_pemesanan', 'desc')
             ->paginate(10);
 
-        // Ambil ID kamar yang sudah di-review oleh pengguna
+        // Get kamar IDs already reviewed by user
         $reviewedKamarIds = Review::where('id_user', $userId)->pluck('id_kamar')->toArray();
 
-        // 3. Panggilan view yang dikoreksi (resources/views/member/pemesanan/my.blade.php)
-        return view('member.pemesanan.my', compact('pemesanan', 'reviewedKamarIds')); 
+        return view('pemesanan.my', compact('pemesanan', 'reviewedKamarIds'));
     }
 
-    // Tampilkan detail pemesanan
+    // Show booking detail (method already effectively exist in routes)
     public function show(Pemesanan $pemesanan)
     {
-        // Pengecekan otorisasi menggunakan Policy
-        $this->authorize('view', $pemesanan); 
+        $this->authorize('view', $pemesanan);
 
-        // View pemesanan.show (kemungkinan di resources/views/pemesanan/show.blade.php atau member/pemesanan/show.blade.php)
-        return view('member.pemesanan.show', compact('pemesanan'));
+        return view('pemesanan.show', compact('pemesanan'));
     }
 
-    // Batalkan pemesanan
+    // Cancel booking (only if pending)
     public function cancelBooking(Pemesanan $pemesanan)
     {
         $this->authorize('cancel', $pemesanan);
@@ -210,7 +231,7 @@ class PemesananController extends Controller
         $pemesanan->payment_status = 'failed';
         $pemesanan->save();
 
-        // Ubah status ketersediaan kamar kembali ke 'available'
+        // Change room availability
         if ($pemesanan->kamar) {
             $pemesanan->kamar->status_ketersediaan = 'available';
             $pemesanan->kamar->save();
@@ -228,6 +249,7 @@ class PemesananController extends Controller
 
         $pemesanan->status_pemesanan = $request->status_pemesanan;
 
+        // Update payment_status accordingly
         if ($request->status_pemesanan == 'cancelled') {
             $pemesanan->payment_status = 'failed';
 

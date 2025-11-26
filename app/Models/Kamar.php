@@ -30,4 +30,9 @@ class Kamar extends Model
     {
         return $this->hasMany(Pemesanan::class, 'id_kamar', 'id_kamar');
     }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class, 'id_kamar', 'id_kamar');
+    }
 }

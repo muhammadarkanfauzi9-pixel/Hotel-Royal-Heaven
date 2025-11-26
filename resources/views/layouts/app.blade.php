@@ -31,15 +31,10 @@
 </head>
 <body class="bg-gray-50">
 
-<<<<<<< HEAD
-    <!-- Gunakan header komponen agar konsisten di semua halaman user -->
-    @include('components.header')
-=======
     <!-- Hero Logo & Navbar -->
     <div class="relative">
         @include('components.Navbar')
     </div>
->>>>>>> origin/main
 
     <!-- Main Content -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 mt-8">
@@ -73,38 +68,38 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-gray-900 text-gray-300 mt-20 py-12">
-        <div class="max-w-7xl mx-auto px-6 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-10 mb-10">
+    <footer class="bg-gray-800 text-white mt-16 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
                 <div>
-                    <h3 class="text-xl font-semibold mb-5 flex items-center gap-3">
-                        <div class="w-10 h-10 bg-yellow-500 rounded-full flex items-center justify-center text-white text-2xl">♛</div>
+                    <h3 class="text-lg font-bold mb-4 flex items-center gap-2">
+                        <div class="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center">♛</div>
                         Royal Heaven Hotel
                     </h3>
-                    <p class="text-gray-400 leading-relaxed">Sistem manajemen pemesanan kamar hotel terpercaya dengan layanan terbaik dan pelayanan ramah untuk kenyamanan Anda.</p>
+                    <p class="text-gray-400">Sistem manajemen pemesanan kamar hotel terpercaya dengan layanan terbaik.</p>
                 </div>
                 
                 <div>
-                    <h4 class="text-lg font-semibold mb-5 border-b border-gray-700 pb-2">Navigasi</h4>
-                    <ul class="space-y-3 text-gray-400">
-                        <li><a href="{{ route('kamar.index') }}" class="hover:text-yellow-500 transition duration-300">Daftar Kamar</a></li>
+                    <h4 class="text-lg font-bold mb-4">Navigasi</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="{{ route('home') }}" class="hover:text-white transition">Daftar Kamar</a></li>
                         @if(auth()->check())
-                            <li><a href="{{ route('member.pemesanan.index') }}" class="hover:text-yellow-500 transition duration-300">Pemesanan Saya</a></li>
+                            <li><a href="{{ route('pemesanan.my') }}" class="hover:text-white transition">Pemesanan Saya</a></li>
                         @endif
                     </ul>
                 </div>
                 
                 <div>
-                    <h4 class="text-lg font-semibold mb-5 border-b border-gray-700 pb-2">Kontak Kami</h4>
+                    <h4 class="text-lg font-bold mb-4">Kontak</h4>
                     <ul class="space-y-2 text-gray-400">
-                        <li><span class="font-semibold">Telepon:</span> +62 821 xxxx xxxx</li>
-                        <li><span class="font-semibold">Email:</span> info@royalheaven.com</li>
-                        <li><span class="font-semibold">Alamat:</span> Jl. Garuda No. 1, Malang</li>
+                        <li>Telepon: +62 821 xxxx xxxx</li>
+                        <li>Email: info@royalheaven.com</li>
+                        <li>Alamat: Jl. Garuda No. 1, Malang</li>
                     </ul>
                 </div>
             </div>
 
-            <div class="border-t border-gray-700 pt-6 text-center text-sm text-gray-500">
+            <div class="border-t border-gray-700 pt-8 text-center text-gray-400">
                 <p>&copy; 2025 Royal Heaven Hotel. All rights reserved.</p>
             </div>
         </div>

@@ -9,7 +9,128 @@
         <p class="text-gray-600">Selamat datang, {{ Auth::user()->name }}!</p>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <!-- Statistics Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div class="bg-blue-50 rounded-lg shadow-md p-6">
+            <div class="flex items-center">
+                <div class="bg-blue-500 rounded-full p-3">
+                    <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                </div>
+                <div class="ml-4">
+                    <p class="text-sm font-medium text-gray-600">Total Bookings</p>
+                    <p class="text-2xl font-bold text-gray-900">{{ $totalBookings }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-green-50 rounded-lg shadow-md p-6">
+            <div class="flex items-center">
+                <div class="bg-green-500 rounded-full p-3">
+                    <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <div class="ml-4">
+                    <p class="text-sm font-medium text-gray-600">Completed</p>
+                    <p class="text-2xl font-bold text-gray-900">{{ $completedBookings }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-yellow-50 rounded-lg shadow-md p-6">
+            <div class="flex items-center">
+                <div class="bg-yellow-500 rounded-full p-3">
+                    <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <div class="ml-4">
+                    <p class="text-sm font-medium text-gray-600">Pending</p>
+                    <p class="text-2xl font-bold text-gray-900">{{ $pendingBookings }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-purple-50 rounded-lg shadow-md p-6">
+            <div class="flex items-center">
+                <div class="bg-purple-500 rounded-full p-3">
+                    <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                    </svg>
+                </div>
+                <div class="ml-4">
+                    <p class="text-sm font-medium text-gray-600">Wishlist</p>
+                    <p class="text-2xl font-bold text-gray-900">{{ $wishlistCount }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- Recent Bookings -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-semibold text-gray-900">Recent Bookings</h3>
+                <a href="{{ route('member.pemesanan.index') }}" class="text-sm text-blue-600 hover:text-blue-800">View All</a>
+            </div>
+            @if($recentBookings->count() > 0)
+                <div class="space-y-4">
+                    @foreach($recentBookings as $booking)
+                    <div class="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
+                        <div>
+                            <p class="font-medium text-gray-900">{{ $booking->kamar->nomor_kamar }} - {{ $booking->kamar->tipe->nama_tipe }}</p>
+                            <p class="text-sm text-gray-600">{{ \Carbon\Carbon::parse($booking->tgl_check_in)->format('d M Y') }} - {{ \Carbon\Carbon::parse($booking->tgl_check_out)->format('d M Y') }}</p>
+                        </div>
+                        <span class="px-2 py-1 text-xs font-medium rounded-full
+                            @if($booking->status_pemesanan == 'confirmed') bg-green-100 text-green-800
+                            @elseif($booking->status_pemesanan == 'pending') bg-yellow-100 text-yellow-800
+                            @elseif($booking->status_pemesanan == 'completed') bg-blue-100 text-blue-800
+                            @else bg-red-100 text-red-800 @endif">
+                            {{ ucfirst($booking->status_pemesanan) }}
+                        </span>
+                    </div>
+                    @endforeach
+                </div>
+            @else
+                <p class="text-gray-500 text-center py-4">No recent bookings</p>
+            @endif
+        </div>
+
+        <!-- Recent Reviews -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-semibold text-gray-900">Recent Reviews</h3>
+                <a href="{{ route('member.reviews.index') }}" class="text-sm text-blue-600 hover:text-blue-800">View All</a>
+            </div>
+            @if($recentReviews->count() > 0)
+                <div class="space-y-4">
+                    @foreach($recentReviews as $review)
+                    <div class="p-4 bg-gray-50 rounded-lg">
+                        <div class="flex items-center mb-2">
+                            <div class="flex text-yellow-400">
+                                @for($i = 1; $i <= 5; $i++)
+                                    <svg class="h-4 w-4 {{ $i <= $review->rating ? 'text-yellow-400' : 'text-gray-300' }}" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                    </svg>
+                                @endfor
+                            </div>
+                            <span class="ml-2 text-sm text-gray-600">{{ $review->kamar->nomor_kamar }} - {{ $review->kamar->tipe->nama_tipe }}</span>
+                        </div>
+                        <p class="text-sm text-gray-700">{{ Str::limit($review->komentar, 100) }}</p>
+                        <p class="text-xs text-gray-500 mt-1">{{ $review->created_at->diffForHumans() }}</p>
+                    </div>
+                    @endforeach
+                </div>
+            @else
+                <p class="text-gray-500 text-center py-4">No reviews yet</p>
+            @endif
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
         <!-- Menu: Daftar Kamar -->
         <div class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition">
             <div class="flex items-center mb-4">

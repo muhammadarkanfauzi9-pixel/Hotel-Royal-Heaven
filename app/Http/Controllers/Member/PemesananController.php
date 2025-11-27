@@ -87,6 +87,14 @@ class PemesananController extends Controller
             $kamar->save();
         }
 
+        // Send booking confirmation email
+        try {
+            \Mail::to($user->email)->send(new \App\Mail\BookingConfirmation($pemesanan));
+        } catch (\Exception $e) {
+            // Log error but don't fail the booking creation
+            \Log::error('Failed to send booking confirmation email: ' . $e->getMessage());
+        }
+
         return redirect()->route('member.pemesanan.my')->with('success', 'Pemesanan berhasil dibuat. Kode pemesanan: ' . $pemesanan->kode_pemesanan);
     }
 

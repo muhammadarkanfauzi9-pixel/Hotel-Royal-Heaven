@@ -107,7 +107,7 @@ Route::prefix('member')->name('member.')->middleware(['auth', 'ensure_member'])-
     Route::get('kamar', [MemberKamarController::class, 'index'])->name('kamar.index');
     Route::get('kamar/{kamar}', [MemberKamarController::class, 'show'])->name('kamar.show');
 
-    // Pemesanan: Menggunakan Membe  rPemesananController
+    // Pemesanan: Menggunakan Member PemesananController
     Route::get('pemesanan/create', [MemberPemesananController::class, 'create'])->name('pemesanan.create');
     Route::post('pemesanan', [MemberPemesananController::class, 'store'])->name('pemesanan.store');
     Route::get('pemesanan/my', [MemberPemesananController::class, 'myBookings'])->name('pemesanan.my');
@@ -115,6 +115,7 @@ Route::prefix('member')->name('member.')->middleware(['auth', 'ensure_member'])-
     Route::delete('pemesanan/{pemesanan}/cancel', [MemberPemesananController::class, 'cancelBooking'])->name('pemesanan.cancel');
     
     // Review
+    Route::get('reviews', [ReviewController::class, 'index'])->name('reviews.index');
     Route::post('reviews', [ReviewController::class, 'store'])->name('reviews.store');
     
     // Profile Member

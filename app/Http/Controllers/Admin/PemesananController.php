@@ -25,17 +25,27 @@ class PemesananController extends Controller
     public function updateStatus(Request $request, Pemesanan $pemesanan)
     {
         $request->validate(['status_pemesanan' => 'required|in:pending,confirmed,cancelled,completed']);
-        
+
         $oldStatus = $pemesanan->status_pemesanan;
-        $pemesanan->status_pemesanan = $request->input('status_pemesanan');
+        $newStatus = $request->input('status_pemesanan');
+
+        $pemesanan->status_pemesanan = $newStatus;
         $pemesanan->save();
-        
+
         // If cancelled, mark kamar as available again
-        if ($request->input('status_pemesanan') == 'cancelled' && $pemesanan->kamar) {
+        if ($newStatus == 'cancelled' && $pemesanan->kamar) {
             $pemesanan->kamar->status_ketersediaan = 'available';
             $pemesanan->kamar->save();
         }
-        
+
+        // Send email notification to member
+        try {
+            \Mail::to($pemesanan->user->email)->send(new \App\Mail\BookingStatusUpdate($pemesanan, $oldStatus, $newStatus));
+        } catch (\Exception $e) {
+            // Log error but don't fail the status update
+            \Log::error('Failed to send booking status update email: ' . $e->getMessage());
+        }
+
         return back()->with('success', 'Status pemesanan berhasil diperbarui.');
     }
 }

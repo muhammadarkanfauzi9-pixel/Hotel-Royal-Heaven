@@ -24,7 +24,7 @@ class User extends Authenticatable
         'nama_lengkap',
         'nohp',
         'nik',
-        'level',
+        'role',
         'api_token',
     ];
 
@@ -69,6 +69,6 @@ class User extends Authenticatable
 
     public function isAdmin(): bool
     {
-        return ($this->level ?? '') === 'admin';
+        return ($this->role ?? '') === 'admin';
     }
 }

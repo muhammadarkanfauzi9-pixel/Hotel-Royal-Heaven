@@ -12,7 +12,7 @@ class Kamar extends Model
     protected $table = 'kamar';
     protected $primaryKey = 'id_kamar';
     public $incrementing = true;
-    public $timestamps = false;
+    public $timestamps = true;
 
     protected $fillable = [
         'nomor_kamar',
@@ -21,6 +21,10 @@ class Kamar extends Model
         'status_ketersediaan',
         'foto_kamar',
         'foto_detail',
+    ];
+
+    protected $casts = [
+        'foto_detail' => 'array',
     ];
 
     public function tipe()

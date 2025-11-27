@@ -27,7 +27,7 @@ use Illuminate\Support\Facades\Auth;
 Route::get('/', [MemberKamarController::class, 'landing'])->name('landing');
 
 Route::get('/home', function () {
-    return view('home');
+    return redirect()->route('landing');
 })->name('home');
 
 // Daftar kamar route accessible publicly for both guests and members

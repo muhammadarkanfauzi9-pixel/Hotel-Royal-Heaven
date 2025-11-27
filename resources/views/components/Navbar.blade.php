@@ -1,90 +1,96 @@
-<header class="fixed top-0 left-0 right-0 z-40 w-full">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        {{-- BAGIAN ATAS: LOGO KIRI & TOMBOL KANAN --}}
-        {{-- items-start dipertahankan agar logo tetap di atas --}}
-        <div class="flex items-start justify-between h-20">
+<header x-data="{ scrolled: false }" 
+        @scroll.window="scrolled = (window.pageYOffset > 20)"
+        class="fixed top-0 left-0 right-0 z-50 w-full transition-all duration-500 pointer-events-none"
+        :class="{ 'py-0': scrolled, 'py-4': !scrolled }">
+    
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pointer-events-auto">
+        <div class="flex items-start justify-between gap-4">
             
-            {{-- LOGO BARU DAN KARTU --}}
-            <div class="relative mt-0 ml-[-20px] md:ml-[-100px] z-50">
-                <div class="bg-white rounded-bl-3xl rounded-br-1xl p-24 md:p-6 shadow-lg 
-                            flex flex-col items-center justify-center text-center"
-                    style="
-                        clip-path: polygon(0% 0%, 100% 0%, 100% 85%, 0% 100%); 
-                        width: 180px; 
-                        height: auto;
-                    ">
+            {{-- 1. LOGO SECTION (Left) --}}
+            <div class="relative z-50 transition-all duration-500 ease-in-out transform origin-top-left shrink-0"
+                 :class="{ 'scale-75 -translate-y-2': scrolled, 'scale-100 translate-y-0': !scrolled }">
+                <div class="bg-white rounded-b-[2.5rem] px-8 pb-6 pt-4 shadow-2xl flex flex-col items-center justify-center border-t-0 relative overflow-hidden group">
+                    {{-- Decorative top line --}}
+                    <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-yellow-400 to-yellow-600"></div>
                     
-                    {{-- Konten Logo --}}
-                    <img src="{{ asset('user/logowebsite.png') }}" alt="Crown Logo" class="h-20 w-auto mb-2">
-                    
-                    <div class="mt-4">
-                        <span class="text-base font-semibold text-gray-800 block">Royal Heaven</span>
-                        <span class="text-xs text-gray-500 block tracking-wider">Luxury Hotel</span>
-                    </div>
-                </div>
-                
-                {{-- Efek Bayangan Diagonal di Bawah --}}
-                <div class="absolute inset-0 z-[-1] rounded-bl-3xl rounded-tl-xl rounded-tr-xl rounded-br-none" 
-                    style="
-                        transform: translate(10px, 10px); 
-                        background-color: rgba(0,0,0,0.1); 
-                        /* clip-path yang sama dengan kartu utama */
-                        clip-path: polygon(0% 0%, 100% 0%, 100% 85%, 0% 100%);
-                    ">
+                    <a href="{{ route('landing') }}" class="flex flex-col items-center gap-2">
+                        <img src="{{ asset('user/logowebsite.png') }}" alt="Royal Heaven" 
+                             class="h-16 w-auto object-contain transition-transform duration-500 group-hover:scale-105">
+                        <div class="text-center">
+                            <h1 class="text-sm font-serif font-bold text-gray-800 tracking-widest uppercase">Royal Heaven</h1>
+                            <p class="text-[0.6rem] text-yellow-600 tracking-wider uppercase font-medium">Luxury Hotel</p>
+                        </div>
+                    </a>
                 </div>
             </div>
-            {{-- AKHIR LOGO BARU --}}
 
-            {{-- Right side nav buttons --}}
-            {{-- Menggunakan pt-2 sebagai ganti mt-7 untuk menurunkan tombol tanpa tumpang tindih dengan Navigasi Tengah --}}
-            <div class="flex items-center pt-2 ml-auto space-x-4"> 
-                @if(auth()->check())
-                    <span class="text-gray-600 font-semibold mr-4">Hi, {{ auth()->user()->nama_lengkap ?? auth()->user()->username }}</span>
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <button type="submit" class="px-4 py-2 text-white bg-yellow-600 rounded hover:bg-yellow-700 transition">
-                            Logout
-                        </button>
-                    </form>
-                @else
-                    {{-- Tidak ada mt- lagi di sini --}}
-                    <a href="{{ route('login') }}" class="px-4 py-2 text-yellow-700 border border-yellow-700 rounded hover:bg-yellow-100 transition">Login</a>
-                    <a href="{{ route('register') }}" class="px-4 py-2 bg-yellow-600 text-white rounded hover:bg-yellow-700 transition">Sign Up</a>
-                @endif
+            {{-- 2. NAVIGATION SECTION (Center) --}}
+            <div class="pt-2 transition-all duration-500" :class="{ 'pt-1': scrolled, 'pt-2': !scrolled }">
+                 <nav class="bg-white rounded-full shadow-xl px-2 py-2 flex items-center gap-1 transition-all duration-500 border border-gray-100"
+                     :class="{ 'bg-white/95 backdrop-blur-md py-1.5': scrolled, 'py-2.5': !scrolled }">
+                    <div class="flex items-center px-4 gap-1">
+                        <a href="{{ route('landing') }}" 
+                           class="px-5 py-2.5 text-sm font-medium rounded-full transition-all duration-300 relative overflow-hidden group"
+                           :class="request()->routeIs('landing') || request()->routeIs('home') ? 'text-yellow-600 bg-yellow-50 font-bold' : 'text-gray-600 hover:text-yellow-600 hover:bg-gray-50'">
+                            Dashboard
+                        </a>
+                        
+                        <a href="{{ route('daftarkamar') }}" 
+                           class="px-5 py-2.5 text-sm font-medium rounded-full transition-all duration-300"
+                           :class="request()->routeIs('daftarkamar*') ? 'text-yellow-600 bg-yellow-50 font-bold' : 'text-gray-600 hover:text-yellow-600 hover:bg-gray-50'">
+                            Daftar Kamar
+                        </a>
+
+                        <a href="{{ route('about') }}" 
+                           class="px-5 py-2.5 text-sm font-medium rounded-full transition-all duration-300"
+                           :class="request()->routeIs('about') ? 'text-yellow-600 bg-yellow-50 font-bold' : 'text-gray-600 hover:text-yellow-600 hover:bg-gray-50'">
+                            About Us
+                        </a>
+                    </div>
+                </nav>
             </div>
-            {{-- End right side nav buttons --}}
-        </div>
-        
-        {{-- BAGIAN TENGAH: NAVIGASI UTAMA --}}
-        {{-- Navigasi ini berada di atas (z-50) dan ditarik ke atas (-60px) --}}
-        <div class="relative z-50 flex justify-center w-full" style="margin-top: -60px;">
-            <nav class="w-full max-w-3xl">
-                <div class="flex gap-x-4 lg:gap-x-6 bg-white rounded-xl py-2 px-4 shadow-xl border-t-2 border-b-2 border-transparent justify-center"
-                    style="box-shadow: 0 4px 24px 0 rgba(0,0,0,0.08);">
+
+            {{-- 3. AUTH SECTION (Right) --}}
+            <div class="pt-2 transition-all duration-500" :class="{ 'pt-1': scrolled, 'pt-2': !scrolled }">
+                <div class="bg-white rounded-full shadow-xl px-2 py-2 flex items-center gap-2 transition-all duration-500 border border-gray-100"
+                     :class="{ 'bg-white/95 backdrop-blur-md py-1.5': scrolled, 'py-2.5': !scrolled }">
                     
-                    @if(!auth()->check())
-                        {{-- Guest Navbar --}}
-                        <a href="{{ route('home') }}" class="px-4 py-2 font-medium text-gray-900 hover:text-yellow-600 transition text-center">Home</a>
-                        <a href="{{ route('about') }}" class="px-4 py-2 font-medium text-gray-900 hover:text-yellow-600 transition text-center">About Us</a>
-                        <a href="{{ route('daftarkamar') }}" class="px-4 py-2 font-medium text-gray-900 hover:text-yellow-600 transition text-center">Data Kamar</a>
-                    @elseif(auth()->user()->isAdmin())
-                        {{-- Admin Navbar --}}
-                        <a href="{{ route('admin.dashboard.index') }}" class="px-4 py-2 font-medium text-gray-900 hover:text-yellow-600 transition text-center">Dashboard</a>
-                        <a href="{{ route('admin.pemesanan.index') }}" class="px-4 py-2 font-medium text-gray-900 hover:text-yellow-600 transition text-center">Manajemen Pemesanan</a>
-                        <a href="{{ route('admin.members.index') }}" class="px-4 py-2 font-medium text-gray-900 hover:text-yellow-600 transition text-center">Statistik</a>
-                        <a href="{{ route('admin.members.index') }}" class="px-4 py-2 font-medium text-gray-900 hover:text-yellow-600 transition text-center">Manajemen Member</a>
+                    @if(auth()->check())
+                        @if(!auth()->user()->isAdmin())
+                            <a href="{{ route('member.profile') }}" 
+                               class="px-5 py-2.5 text-sm font-medium rounded-full transition-all duration-300"
+                               :class="request()->routeIs('member.profile') ? 'text-yellow-600 bg-yellow-50 font-bold' : 'text-gray-600 hover:text-yellow-600 hover:bg-gray-50'">
+                                Profile
+                            </a>
+                            <a href="{{ route('member.pemesanan.my') }}" 
+                               class="px-5 py-2.5 text-sm font-medium rounded-full transition-all duration-300"
+                               :class="request()->routeIs('member.pemesanan.my') ? 'text-yellow-600 bg-yellow-50 font-bold' : 'text-gray-600 hover:text-yellow-600 hover:bg-gray-50'">
+                                Riwayat
+                            </a>
+                            <form method="POST" action="{{ route('logout') }}" class="ml-2">
+                                @csrf
+                                <button type="submit" class="w-10 h-10 flex items-center justify-center rounded-full bg-red-50 text-red-500 hover:bg-red-500 hover:text-white transition-all duration-300" title="Logout">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                                    </svg>
+                                </button>
+                            </form>
+                        @else
+                            <a href="{{ route('admin.dashboard.index') }}" class="px-5 py-2.5 text-sm font-bold text-red-600 hover:bg-red-50 rounded-full transition-all">
+                                Admin Panel
+                            </a>
+                        @endif
                     @else
-                        {{-- Member Navbar --}}
-                        <a href="{{ route('home') }}" class="px-4 py-2 font-medium text-gray-900 hover:text-yellow-600 transition text-center">Home</a>
-                        <a href="{{ route('daftarkamar') }}" class="px-4 py-2 font-medium text-gray-900 hover:text-yellow-600 transition text-center">Daftar Kamar</a>
-                        <a href="{{ route('member.pemesanan.create') }}" class="px-4 py-2 font-medium text-gray-900 hover:text-yellow-600 transition text-center">Pemesanan Kamar</a>
-                        <a href="{{ route('member.pemesanan.my') }}" class="px-4 py-2 font-medium text-gray-900 hover:text-yellow-600 transition text-center">Riwayat Kamar</a>
-                        <a href="{{ route('member.profile') }}" class="px-4 py-2 font-medium text-gray-900 hover:text-yellow-600 transition text-center">Profil</a>
-                        <a href="{{ route('about') }}" class="px-4 py-2 font-medium text-gray-900 hover:text-yellow-600 transition text-center">About Us</a>
+                        <a href="{{ route('login') }}" class="px-6 py-2.5 text-sm font-bold text-gray-700 hover:text-yellow-600 transition-colors">
+                            Login
+                        </a>
+                        <a href="{{ route('register') }}" class="px-6 py-2.5 text-sm font-bold text-white bg-yellow-500 rounded-full hover:bg-yellow-600 transition-all shadow-lg shadow-yellow-500/30 hover:shadow-yellow-500/50 transform hover:-translate-y-0.5">
+                            Sign Up
+                        </a>
                     @endif
                 </div>
-            </nav>
+            </div>
+
         </div>
     </div>
 </header>

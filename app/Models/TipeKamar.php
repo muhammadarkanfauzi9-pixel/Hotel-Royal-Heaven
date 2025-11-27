@@ -12,7 +12,7 @@ class TipeKamar extends Model
     protected $table = 'tipe_kamar';
     protected $primaryKey = 'id_tipe';
     public $incrementing = true;
-    public $timestamps = false;
+    public $timestamps = true;
 
     protected $fillable = [
         'nama_tipe',

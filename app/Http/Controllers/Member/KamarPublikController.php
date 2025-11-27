@@ -17,6 +17,7 @@ class KamarPublikController extends Controller // <<< Perubahan NAMA CLASS
     {
         $featured_kamar = Kamar::where('status_ketersediaan', 'available')
                                ->with('tipe')
+                               ->inRandomOrder()
                                ->limit(4)
                                ->get();
 
@@ -30,18 +31,7 @@ class KamarPublikController extends Controller // <<< Perubahan NAMA CLASS
      */
     public function index(Request $request): View
     {
-        $query = Kamar::with('tipe');
-
-        if ($request->filled('type')) {
-            $query->whereHas('tipe', function($q) use ($request){
-                $q->where('nama_tipe', 'like', '%'.$request->input('type').'%');
-            });
-        }
-
-        $kamars = $query->paginate(15);
-        $tipeKamars = TipeKamar::all();
-
-        return view('kamar.index', compact('kamars', 'tipeKamars'));
+        return view('kamar.index');
     }
 
     /**

@@ -5,6 +5,26 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property int $id_pemesanan
+ * @property int $id_user
+ * @property int $id_kamar
+ * @property string $kode_pemesanan
+ * @property \Illuminate\Support\Carbon $tgl_pemesanan
+ * @property \Illuminate\Support\Carbon $tgl_check_in
+ * @property \Illuminate\Support\Carbon $tgl_check_out
+ * @property int $total_malam
+ * @property float $total_harga
+ * @property string $nama_pemesan
+ * @property string $nik
+ * @property string $nohp
+ * @property string $pilihan_pembayaran
+ * @property string|null $catatan
+ * @property string $status_pemesanan
+ * @property string $payment_status
+ * @property \App\Models\User $user
+ * @property \App\Models\Kamar $kamar
+ */
 class Pemesanan extends Model
 {
     use HasFactory;
@@ -12,12 +32,12 @@ class Pemesanan extends Model
     protected $table = 'pemesanan';
     protected $primaryKey = 'id_pemesanan';
     public $incrementing = true;
-    public $timestamps = false;
+    public $timestamps = true;
 
-    protected $dates = [
-        'tgl_check_in',
-        'tgl_check_out',
-        'tgl_pemesanan',
+    protected $casts = [
+        'tgl_check_in' => 'date',
+        'tgl_check_out' => 'date',
+        'tgl_pemesanan' => 'datetime',
     ];
 
     protected $fillable = [
@@ -34,6 +54,9 @@ class Pemesanan extends Model
         'pilihan_pembayaran',
         'catatan',
         'status_pemesanan',
+        'payment_status',
+        'midtrans_transaction_id',
+        'payment_url',
         'tgl_pemesanan',
     ];
 

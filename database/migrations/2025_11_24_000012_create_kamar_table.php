@@ -14,6 +14,9 @@ return new class extends Migration
             $table->unsignedBigInteger('id_tipe');
             $table->text('deskripsi')->nullable();
             $table->string('status_ketersediaan', 50)->default('available');
+            $table->string('foto_kamar')->nullable();
+            $table->text('foto_detail')->nullable();
+            $table->timestamps();
 
             $table->foreign('id_tipe')->references('id_tipe')->on('tipe_kamar')->onDelete('cascade');
         });

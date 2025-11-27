@@ -13,6 +13,7 @@ return new class extends Migration
             $table->string('nama_tipe', 100);
             $table->decimal('harga_dasar', 10, 2)->default(0);
             $table->integer('max_tamu')->default(1);
+            $table->timestamps();
         });
     }
 

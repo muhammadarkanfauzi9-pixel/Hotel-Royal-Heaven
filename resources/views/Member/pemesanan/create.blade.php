@@ -16,7 +16,7 @@
                 </div>
             @endif
 
-            <form action="{{ route('pemesanan.store') }}" method="POST" class="space-y-6">
+            <form action="{{ route('member.pemesanan.store') }}" method="POST" class="space-y-6">
                 @csrf
 
                 <!-- Pilih Kamar -->
@@ -218,7 +218,7 @@
                         Lanjutkan Pemesanan
                     </button>
                     <a 
-                        href="{{ route('home') }}" 
+                        href="{{ route('member.index') }}" 
                         class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-3 px-4 rounded-lg transition-colors duration-200 text-center"
                     >
                         Batal
@@ -263,3 +263,4 @@
         });
     </script>
 @endsection
+X

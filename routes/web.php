@@ -11,7 +11,6 @@ use App\Http\Controllers\Member\KamarController as MemberKamarController;
 use App\Http\Controllers\Member\ProfileController as MemberProfileController;
 use App\Http\Controllers\Admin\ProfileController as AdminProfileController;
 
-// 🔥 FIX INI YANG PENTING (IMPORT CONTROLLER MEMBER)
 use App\Http\Controllers\Member\PemesananController as MemberPemesananController;
 
 // Landing page untuk user
@@ -56,7 +55,6 @@ Route::post('password/reset', [AuthController::class, 'reset'])->name('password.
 
 // Member
 Route::prefix('member')->name('member.')->middleware(['auth'])->group(function(){
-    // ➕ Tambahan route biar gak error
     Route::get('pemesanan', [MemberPemesananController::class, 'index'])->name('pemesanan.index');
 
     Route::get('pemesanan/create', [MemberPemesananController::class, 'create'])->name('pemesanan.create');

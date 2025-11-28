@@ -12,6 +12,18 @@ use Illuminate\Support\Facades\Validator;
 
 class PemesananController extends Controller
 {
+    /**
+     * Display a listing of the resource for Admin.
+     */
+    public function index()
+    {
+        $pemesanans = Pemesanan::with(['user', 'kamar'])
+            ->latest('tgl_pemesanan')
+            ->paginate(10);
+
+        return view('admin.pemesanan.index', compact('pemesanans'));
+    }
+
     // Tampilkan form untuk membuat pemesanan baru
     public function create(Request $request)
     {

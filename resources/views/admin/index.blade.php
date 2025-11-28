@@ -1,68 +1,35 @@
 @extends('layouts.admin')
 
 @section('page_title', 'Dashboard')
-@section('page_subtitle', 'Selamat datang di sistem manajemen hotel Royal Heaven')
 
 @section('content')
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        
-        <!-- Card: Total Kamar (Warna Amber/Kuning) -->
-        <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-amber-500 transition duration-300 hover:shadow-xl">
-            <div class="flex items-center">
-                <div class="flex-shrink-0 p-3 bg-amber-100 rounded-full">
-                    <svg class="h-6 w-6 text-amber-600" fill="currentColor" viewBox="0 0 20 20"><path d="M4 14V6a2 2 0 012-2h8a2 2 0 012 2v8a2 2 0 01-2 2H6a2 2 0 01-2-2zM6 8h8v6H6V8z"></path></svg>
-                </div>
-                <div class="ml-5 w-0 flex-1">
-                    <dl>
-                        <dt class="text-sm font-semibold text-gray-500 truncate">Total Kamar</dt>
-                        <dd class="text-3xl font-extrabold text-gray-900">{{ $totalKamar ?? 0 }}</dd>
-                    </dl>
-                </div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+    <!-- Total Members Card -->
+    <div class="bg-white p-6 rounded-lg shadow-md border-l-4 border-yellow-500">
+        <div class="flex items-center">
+            <div class="p-3 rounded-full bg-yellow-100 text-yellow-600">
+                <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+            </div>
+            <div class="ml-4">
+                <p class="text-sm font-medium text-gray-600">Total Member</p>
+                <p class="text-2xl font-bold text-gray-900">{{ \App\Models\User::where('role', '!=', 'admin')->count() }}</p>
             </div>
         </div>
+    </div>
 
-        <!-- Card: Kamar Tersedia (Warna Hijau) -->
-        <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-green-500 transition duration-300 hover:shadow-xl">
-            <div class="flex items-center">
-                <div class="flex-shrink-0 p-3 bg-green-100 rounded-full">
-                    <svg class="h-6 w-6 text-green-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-                </div>
-                <div class="ml-5 w-0 flex-1">
-                    <dl>
-                        <dt class="text-sm font-semibold text-gray-500 truncate">Kamar Tersedia</dt>
-                        <dd class="text-3xl font-extrabold text-gray-900">{{ $kamarTersedia ?? 0 }}</dd>
-                    </dl>
-                </div>
+    <!-- Total Rooms Card -->
+    <div class="bg-white p-6 rounded-lg shadow-md border-l-4 border-blue-500">
+        <div class="flex items-center">
+            <div class="p-3 rounded-full bg-blue-100 text-blue-600">
+                <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"></path>
+                </svg>
             </div>
-        </div>
-
-        <!-- Card: Total Pemesanan (Warna Biru) -->
-        <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-blue-500 transition duration-300 hover:shadow-xl">
-            <div class="flex items-center">
-                <div class="flex-shrink-0 p-3 bg-blue-100 rounded-full">
-                    <svg class="h-6 w-6 text-blue-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm-1-8a1 1 0 112 0v3a1 1 0 11-2 0v-3z" clip-rule="evenodd"></path></svg>
-                </div>
-                <div class="ml-5 w-0 flex-1">
-                    <dl>
-                        <dt class="text-sm font-semibold text-gray-500 truncate">Total Pemesanan</dt>
-                        <dd class="text-3xl font-extrabold text-gray-900">{{ $totalPemesanan ?? 0 }}</dd>
-                    </dl>
-                </div>
-            </div>
-        </div>
-
-        <!-- Card: Total Member (Warna Ungu) -->
-        <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-purple-500 transition duration-300 hover:shadow-xl">
-            <div class="flex items-center">
-                <div class="flex-shrink-0 p-3 bg-purple-100 rounded-full">
-                    <svg class="h-6 w-6 text-purple-600" fill="currentColor" viewBox="0 0 20 20"><path d="M10.5 1.5H5.75A2.25 2.25 0 003.5 3.75v12.5A2.25 2.25 0 005.75 18.5h8.5a2.25 2.25 0 002.25-2.25V6.5m-11-5v5m5.5-5v5M3.5 11h13"></path></svg>
-                </div>
-                <div class="ml-5 w-0 flex-1">
-                    <dl>
-                        <dt class="text-sm font-semibold text-gray-500 truncate">Total Member</dt>
-                        <dd class="text-3xl font-extrabold text-gray-900">{{ $totalMember ?? 0 }}</dd>
-                    </dl>
-                </div>
+            <div class="ml-4">
+                <p class="text-sm font-medium text-gray-600">Total Kamar</p>
+                <p class="text-2xl font-bold text-gray-900">{{ \App\Models\Kamar::count() }}</p>
             </div>
         </div>
     </div>

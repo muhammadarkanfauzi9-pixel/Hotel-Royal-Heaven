@@ -3,101 +3,118 @@
 @section('page_title', 'Home')
 
 @section('content')
-</head>
-<body class="bg-white font-sans">
+
+{{-- Pastikan Anda tidak memiliki tag <body> atau </head> yang terbuka atau tertutup di sini 
+karena sudah ada di 'layouts.app' --}}
 
     {{-- Header dipisah ke komponen --}}
     @include('components.Navbar')
-    @include('components.hero-section')
-        
-        <hr class="max-w-7xl mx-auto">
-        
 
-      <!-- START: A Little About Us Section (Further Reduced Size) -->
-<section class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+    {{-- HERO SECTION --}}
+    {{-- Menggunakan komponen Blade seperti kode asli dan mengisi data (props) --}}
+    <x-hero-section 
+        title="Hotel for Every Moment Rich in Money"
+        subtitle="The Ultimate Luxury Experience"
+        description="A hotel that has been established for a long time and has a cool be used as a family vacation spot."
+        image='user/GambarHeroSection.jpg'
+        ctaText="Know More About Hotel"
+        ctaLink="{{ route('about') }}"
+        splitPercent="50"
+        angle="105"
+    />
         
-        <!-- Kiri: Teks dan Deskripsi -->
-        <div class="pr- lg:pr-6">
-            <h2 class="text-3xl font-extrabold mb-3 text-gray-900">
-                A <span class="text-amber-600">little</span> about us
-            </h2>
-            <p class="text-sm text-gray-600 leading-relaxed">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed ut perspiciatis unde omnis iste 
-                natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.
-            </p>
-            <p class="mt-2 text-sm text-gray-600 leading-relaxed">
-                Kami adalah Royal Heaven, destinasi terbaik untuk pengalaman menginap mewah dan tak terlupakan.
-                Setiap detail kami rancang untuk kenyamanan Anda.
-            </p>
-        </div>
+    <hr class="max-w-7xl mx-auto border-gray-200 my-8">
 
-        <!-- Kanan: Grid Gambar Placeholder -->
-        <div class="grid grid-cols-2 grid-rows-2 gap-2 min-h-[300px]">
+    {{-- START: A Little About Us Section (Mengambil desain dari kode kedua Anda) --}}
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
             
-            <!-- Placeholder Atas Kiri -->
-            <div class="rounded-lg shadow-md relative overflow-hidden group">
-                {{-- WAJIB: Ganti placeholder ini dengan tag <img> dan URL gambar kamu --}}
-                <img src="user/ruangkanan.jpg" alt="Kamar Deluxe" class="absolute inset-0 w-full h-full object-cover">
+            {{-- Kiri: Teks dan Deskripsi --}}
+            <div class="pr- lg:pr-6">
+                <h2 class="text-3xl font-extrabold mb-3 text-gray-900">
+                    A <span class="text-yellow-500">little</span> about us
+                </h2>
+                <p class="text-base text-gray-600 leading-relaxed mb-4">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut perspiciatis unde omnis iste 
+                    natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.
+                </p>
+                <p class="text-base text-gray-600 leading-relaxed">
+                    Kami adalah Royal Heaven, destinasi terbaik untuk pengalaman menginap mewah dan tak terlupakan.
+                    Setiap detail kami rancang untuk kenyamanan Anda.
+                </p>
+            </div>
 
+            {{-- Kanan: Grid Gambar (Diambil dari kode kedua Anda) --}}
+            <div class="grid grid-cols-2 grid-rows-2 gap-4 min-h-[300px]">
                 
-                {{-- Overlay Link untuk Upload Gambar 1 --}}
-                <a href="user/ruangkanan.jpg" class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center text-white text-xs font-bold p-2 z-20">
-                </a>
-            </div>
+                {{-- Placeholder Atas Kiri --}}
+                <div class="rounded-2xl h-48 bg-gray-300 relative overflow-hidden">
+                    <img src="{{ asset('user/ruangkanan.jpg') }}" alt="Kamar Deluxe" class="absolute inset-0 w-full h-full object-cover">
+                </div>
 
-            <!-- Placeholder Atas Kanan -->
-            <div class="rounded-lg shadow-md relative overflow-hidden group">
-                {{-- WAJIB: Ganti placeholder ini dengan tag <img> dan URL gambar kamu --}}
-                <img src="user/ruangkiri.jpg" alt="Kolam Renang" class="absolute inset-0 w-full h-full object-cover">
+                {{-- Placeholder Atas Kanan --}}
+                <div class="rounded-2xl h-48 bg-gray-300 relative overflow-hidden">
+                    <img src="{{ asset('user/ruangkiri.jpg') }}" alt="Kolam Renang" class="absolute inset-0 w-full h-full object-cover">
+                </div>
                 
-               
-                {{-- Overlay Link untuk Upload Gambar 2 --}}
-                <a href="user/ruangkiri.jpg" class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center text-white text-xs font-bold p-2 z-20">
-                    
-                </a>
+                {{-- Placeholder Besar Bawah (Col Span 2) --}}
+                <div class="col-span-2 rounded-2xl h-48 bg-gray-300 relative overflow-hidden">
+                    <img src="{{ asset('user/fotoblokbawah.avif') }}" alt="Lobi Hotel Utama" class="absolute inset-0 w-full h-full object-cover">
+                </div>
             </div>
-            
-            <!-- Placeholder Besar Bawah (Col Span 2) -->
-            <div class="col-span-2 rounded-lg shadow-md relative overflow-hidden group">
-                {{-- WAJIB: Ganti placeholder ini dengan tag <img> dan URL gambar kamu --}}
-                <img src="user/fotoblokbawah.avif" alt="Lobi Hotel Utama" class="absolute inset-0 w-full h-full object-cover">
 
-                {{-- Overlay Link untuk Upload Gambar 3 --}}
-                <a href="user/fotoblokbawah.avif" class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center text-white text-xs font-bold p-2 z-20">
-                    
-                </a>
-            </div>
         </div>
+    </section>
+    {{-- END: A Little About Us Section --}}
 
-    </div>
-</section>
-<!-- END: A Little About Us Section -->
-        <!-- Popular Rooms Section -->
-        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-            <h2 class="text-2xl font-bold text-center text-gray-900 mb-12">Our Most Popular Rooms</h2>
-            <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-                @for ($i = 0; $i < 3; $i++)
-                <div class="bg-white rounded-xl shadow-lg overflow-hidden">
-                    <div class="bg-gray-200 h-48 w-full"></div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-semibold text-gray-900">Headline</h3>
-                        <p class="mt-2 text-sm text-gray-500 line-clamp-3">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                        </p>
-                        <div class="mt-4 flex justify-end">
-                            <a href="#" class="text-sm font-medium text-orange-500 hover:text-orange-600 border border-orange-500 px-3 py-1 rounded-full transition duration-150 ease-in-out">
-                                Detail
-                            </a>
+    <hr class="max-w-7xl mx-auto border-gray-200 my-8">
+
+    {{-- Popular Rooms Section (Menggunakan variabel $featured_kamar yang BENAR) --}}
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <h2 class="text-3xl font-serif font-bold text-center text-gray-900 mb-12">Our Most Popular Rooms</h2>
+        <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+            
+            {{-- Loop data: WAJIB DISEDIAKAN oleh Controller Anda --}}
+            @foreach($featured_kamar as $room)
+            <div class="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition duration-300 group flex flex-col">
+                {{-- Image --}}
+                <div class="h-64 w-full overflow-hidden bg-gray-200 relative">
+                    @if($room->foto_kamar)
+                        <img src="{{ asset('storage/' . $room->foto_kamar) }}" alt="{{ $room->nomor_kamar }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                    @else
+                        <div class="w-full h-full flex items-center justify-center text-gray-400">
+                            <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                         </div>
+                    @endif
+                    <div class="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-gray-900 shadow-sm">
+                        {{ $room->tipe->nama_tipe }}
                     </div>
                 </div>
-                @endfor
+
+                {{-- Content --}}
+                <div class="p-8 bg-gray-100/50 flex flex-col flex-grow">
+                    <h3 class="text-2xl font-bold text-gray-900 mb-2">Kamar {{ $room->nomor_kamar }}</h3>
+                    <p class="text-gray-500 text-sm line-clamp-2 mb-6 flex-grow">
+                        {{ $room->deskripsi }}
+                    </p>
+                    
+                    <div class="flex flex-col gap-1 mb-6">
+                        <span class="text-xs font-semibold text-yellow-600 uppercase tracking-wider">Price</span>
+                        <span class="text-xl font-bold text-gray-900">Rp {{ number_format($room->tipe->harga_dasar, 0, ',', '.') }}</span>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 mt-auto">
+                        <a href="{{ route('member.kamar.show', $room) }}" class="px-4 py-3 text-center text-sm font-semibold text-gray-700 border border-gray-300 rounded-xl hover:bg-white hover:border-gray-400 transition">
+                            Detail
+                        </a>
+                        <a href="{{ route('member.kamar.show', $room) }}" class="px-4 py-3 text-center text-sm font-semibold text-white bg-yellow-500 rounded-xl hover:bg-yellow-600 transition shadow-md shadow-yellow-200">
+                            Booking Now
+                        </a>
+                    </div>
+                </div>
             </div>
-        </section>
-        
+            @endforeach
+        </div>
+    </section>
 
-    </main>
-
-    </body>
-</html>
+@endsection

@@ -5,33 +5,24 @@ namespace App\Http\Controllers\Member;
 use App\Http\Controllers\Controller;
 use App\Models\Pemesanan;
 use App\Models\Kamar;
+use App\Models\Review;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class PemesananController extends Controller
 {
     // Member's bookings
-    public function index()
-    {
-        $user = Auth::user();
-        $pemesanan = $user->bookings()->with('kamar')->latest('tgl_pemesanan')->paginate(10);
-        return view('member.pemesanan.index', compact('pemesanan'));
-    }
-
-    // Tambahan agar route 'pemesanan/my' tidak error
     public function myBookings()
     {
         $user = Auth::user();
-        $pemesanan = $user->bookings()->with('kamar')->latest('tgl_pemesanan')->paginate(10);
-        return view('member.pemesanan.index', compact('pemesanan'));
-    }
+        $pemesanan = $user->pemesanan()->with('kamar')->latest('tgl_pemesanan')->paginate(10);
 
-    // Create pemesanan form
-    public function create(Request $request)
-    {
-        $kamars = Kamar::with('tipe')->where('status_ketersediaan', 'available')->get();
-        $selectedKamarId = $request->query('kamar');
-        return view('member.pemesanan.create', compact('kamars', 'selectedKamarId'));
+        // Get IDs of rooms that the user has already reviewed
+        $reviewedKamarIds = Review::where('id_user', $user->id)
+            ->pluck('id_kamar')
+            ->toArray();
+
+        return view('Member.pemesanan.my', compact('pemesanan', 'reviewedKamarIds'));
     }
 
     // Store pemesanan
@@ -83,7 +74,15 @@ class PemesananController extends Controller
             $kamar->save();
         }
 
-        return redirect()->route('member.pemesanan.index')->with('success', 'Pemesanan berhasil dibuat. Kode pemesanan: ' . $pemesanan->kode_pemesanan);
+        // Send booking confirmation email
+        try {
+            \Mail::to($user->email)->send(new \App\Mail\BookingConfirmation($pemesanan));
+        } catch (\Exception $e) {
+            // Log error but don't fail the booking creation
+            Log::error('Failed to send booking confirmation email: ' . $e->getMessage());
+        }
+
+        return redirect()->route('member.pemesanan.my')->with('success', 'Pemesanan berhasil dibuat. Kode pemesanan: ' . $pemesanan->kode_pemesanan);
     }
 
     // Show pemesanan detail
@@ -94,5 +93,31 @@ class PemesananController extends Controller
             abort(403);
         }
         return view('member.pemesanan.show', compact('pemesanan'));
+    }
+
+    // Cancel pemesanan
+    public function cancelBooking(Pemesanan $pemesanan)
+    {
+        $user = Auth::user();
+        if ($pemesanan->id_user != $user->id) {
+            abort(403);
+        }
+
+        // Only allow cancellation if status is pending
+        if ($pemesanan->status_pemesanan !== 'pending') {
+            return back()->with('error', 'Pemesanan tidak dapat dibatalkan karena sudah dikonfirmasi atau selesai.');
+        }
+
+        // Update status to cancelled
+        $pemesanan->status_pemesanan = 'cancelled';
+        $pemesanan->save();
+
+        // Mark kamar as available again
+        if ($pemesanan->kamar) {
+            $pemesanan->kamar->status_ketersediaan = 'available';
+            $pemesanan->kamar->save();
+        }
+
+        return back()->with('success', 'Pemesanan berhasil dibatalkan.');
     }
 }

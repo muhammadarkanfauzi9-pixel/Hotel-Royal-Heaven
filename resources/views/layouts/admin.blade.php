@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('page_title', 'Admin Dashboard') - Royal Heaven Hotel</title>
-    
-    <script src="https://cdn.tailwindcss.com"></script>
+
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
         /* CSS Sidebar */
@@ -89,6 +90,8 @@
             @yield('content')
         </div>
     </div>
+
+    @yield('scripts')
 
 </body>
 </html>

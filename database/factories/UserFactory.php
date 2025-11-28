@@ -29,7 +29,7 @@ class UserFactory extends Factory
             'nama_lengkap' => fake()->name(),
             'nohp' => fake()->numerify('08##########'),
             'nik' => (string)fake()->numerify('################'),
-            'level' => 'member',
+            'role' => 'member',
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
         ];

@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('page_title', 'Hotel Royal Heaven')</title>
-    
-    <script src="https://cdn.tailwindcss.com"></script>
+
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     
     <style>
         .navbar {
@@ -82,7 +82,9 @@
                 <div>
                     <h4 class="text-lg font-bold mb-4">Navigasi</h4>
                     <ul class="space-y-2 text-gray-400">
-                        <li><a href="{{ route('kamar.index') }}" class="hover:text-white transition">Daftar Kamar</a></li>
+                        <li><a href="{{ route('daftarkamar') }}" class="hover:text-white transition">Daftar Kamar</a></li>
+                        <li><a href="{{ route('about') }}" class="hover:text-white transition">About Us</a></li>
+
                         @if(Auth::check())
                             <li><a href="{{ route('member.pemesanan.my') }}" class="hover:text-white transition">Pemesanan Saya</a></li>
                         @endif

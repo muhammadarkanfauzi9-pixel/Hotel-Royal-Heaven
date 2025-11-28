@@ -17,7 +17,7 @@
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nama</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">No. HP</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Level</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Role</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Aksi</th>
                 </tr>
             </thead>
@@ -28,10 +28,10 @@
                         <td class="px-6 py-4 text-sm text-gray-600">{{ $user->email }}</td>
                         <td class="px-6 py-4 text-sm text-gray-600">{{ $user->nohp ?? '-' }}</td>
                         <td class="px-6 py-4 text-sm">
-                            <span class="px-3 py-1 rounded-full text-xs font-medium 
-                                @if($user->level == 'admin') bg-red-100 text-red-800
+                            <span class="px-3 py-1 rounded-full text-xs font-medium
+                                @if($user->role == 'admin') bg-red-100 text-red-800
                                 @else bg-blue-100 text-blue-800 @endif">
-                                {{ ucfirst($user->level) }}
+                                {{ ucfirst($user->role) }}
                             </span>
                         </td>
                         <td class="px-6 py-4 text-sm space-x-2">

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Middleware;
+namespace App\Http\Middleware; // <<< HARUS DIPERBAIKI INI
 
 use Closure;
 use Illuminate\Http\Request;
@@ -10,11 +10,16 @@ class EnsureMember
 {
     public function handle(Request $request, Closure $next)
     {
+        // Pengguna pasti sudah login karena middleware 'auth' dijalankan sebelumnya.
         $user = Auth::user();
-        if (!$user || $user->isAdmin()) {
-            return redirect()->back()->with('error', 'Unauthorized access');
+
+        // 1. Cek apakah pengguna adalah Admin
+        if ($user->isAdmin()) {
+            // Redirect ke dashboard admin jika dia admin
+            return redirect()->route('admin.dashboard.index')->with('error', 'Admin tidak dapat mengakses halaman member.');
         }
 
+        // 2. Jika dia bukan admin (maka dia member), lanjutkan permintaan
         return $next($request);
     }
 }

@@ -1,0 +1,17 @@
+[33m113fd1e[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mdev2[m[33m)[m Merge remote-tracking branch 'origin/main' into dev2
+[33m6d6751b[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m halo
+[33m492fa26[m[33m ([m[1;31morigin/dev2[m[33m)[m fix: databse dan layout
+[33mda52071[m maul
+[33m6c90170[m arkan tgl 27
+[33m15cd28a[m progress be
+[33m7d47299[m Simpan perubahan lokal pada Navbar sebelum merge progress teman.
+[33m9d70799[m tampilan admin sudah
+[33mfdd9292[m tinggal route pemesanan dan manajemen kamar admin
+[33m3ffcbfe[m Fix: Resolve is_admin middleware conflicts and improve session handling
+[33m44c424d[m Resolve merge conflicts: accept origin/main for remaining conflicted files
+[33m0a258ad[m Resolve merge conflicts: accept origin/main for resources/views/Member/pemesanan/create.blade.php
+[33mdc93021[m WIP: Simpan perubahan sebelum merge dari main
+[33m7ed4c94[m dashboard user dan guest sudah
+[33m85a953d[m perubahan tampilan
+[33mbe50113[m first commit
+[33mf49147f[m first commit

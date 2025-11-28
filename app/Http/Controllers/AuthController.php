@@ -33,12 +33,10 @@ class AuthController extends Controller
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
             'nama_lengkap' => $data['nama_lengkap'] ?? null,
-            'level' => 'member',
+            'role' => 'member',
         ]);
 
-        Auth::login($user);
-
-        return redirect()->route('login');
+        return redirect()->route('login')->with('success', 'Registration successful! Please login to continue.');
     }
 
     public function showLogin()
@@ -55,9 +53,8 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials, $request->boolean('remember'))){
             $request->session()->regenerate();
-            // Redirect admins to admin dashboard, members to member index
             $user = Auth::user();
-            if ($user->isAdmin()) {
+            if ($user->role === "admin") {
                 return redirect()->route('admin.dashboard.index');
             }
             return redirect()->route('login');

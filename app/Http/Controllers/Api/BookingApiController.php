@@ -15,7 +15,7 @@ class BookingApiController extends Controller
     public function index(Request $request)
     {
         $user = \Illuminate\Support\Facades\Auth::user();
-        if ($user && ($user->level ?? '') === 'admin') {
+        if ($user && ($user->role ?? '') === 'admin') {
             $q = Pemesanan::with(['user','kamar']);
         } else {
             $q = Pemesanan::with('kamar')->where('id_user', $user->id);
@@ -67,7 +67,7 @@ class BookingApiController extends Controller
     {
         $p = Pemesanan::with(['user','kamar'])->findOrFail($id);
         $user = \Illuminate\Support\Facades\Auth::user();
-        if (($user->level ?? '') !== 'admin' && $p->id_user != $user->id) {
+        if (($user->role ?? '') !== 'admin' && $p->id_user != $user->id) {
             return response()->json(['message' => 'Forbidden'], 403);
         }
         return response()->json($p);
@@ -76,7 +76,7 @@ class BookingApiController extends Controller
     public function updateStatus(Request $request, $id)
     {
         $user = \Illuminate\Support\Facades\Auth::user();
-        if (($user->level ?? '') !== 'admin') {
+        if (($user->role ?? '') !== 'admin') {
             return response()->json(['message' => 'Forbidden'], 403);
         }
 

@@ -1,44 +1,51 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AdminMemberController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\Admin\KamarController;
+
+// --- Imports Controller Admin ---
+use App\Http\Controllers\Admin\KamarController as AdminKamarController;
 use App\Http\Controllers\Admin\PemesananController as AdminPemesananController;
-use App\Http\Controllers\ReviewController;
-use App\Http\Controllers\Member\KamarController as MemberKamarController;
-use App\Http\Controllers\Member\ProfileController as MemberProfileController;
 use App\Http\Controllers\Admin\ProfileController as AdminProfileController;
 
+// --- Imports Controller Member/Publik ---
+use App\Http\Controllers\Member\KamarPublikController as MemberKamarController; // <<< Controller Kamar Publik
+use App\Http\Controllers\Member\ProfileController as MemberProfileController;
 use App\Http\Controllers\Member\PemesananController as MemberPemesananController;
+use App\Http\Controllers\ReviewController;
 
-// Landing page untuk user
-Route::get('/', [MemberKamarController::class, 'index'])->name('landing');
+use Illuminate\Support\Facades\Auth;
 
-// Home
-Route::get('/home', fn() => view('home'))->name('home');
+// ====================================================================
+// A. ROUTE PUBLIK / GUEST
+// ====================================================================
 
-// Daftar kamar
+// Public landing page (Home)
+// Menggunakan MemberKamarController untuk menampilkan kamar unggulan
+Route::get('/', [MemberKamarController::class, 'landing'])->name('landing');
+
+Route::get('/home', function () {
+    return redirect()->route('landing');
+})->name('home');
+
+// Daftar kamar route accessible publicly for both guests and members
+// Menggunakan MemberKamarController untuk daftar kamar
 Route::get('/daftarkamar', [MemberKamarController::class, 'index'])->name('daftarkamar');
+Route::get('/daftarkamar/{kamar}', [MemberKamarController::class, 'show'])->name('daftarkamar.show');
+
 
 // About
 Route::get('/about', fn() => view('about'))->name('about');
 
-// Admin
-Route::middleware(['auth', 'is_admin'])->prefix('admin')->group(function () {
-    Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard.index');
-    Route::resource('kamar', KamarController::class)->except(['show']);
-    Route::get('pemesanan', [AdminPemesananController::class, 'index'])->name('admin.pemesanan.index');
-    Route::post('pemesanan/{pemesanan}/status', [AdminPemesananController::class, 'updateStatus'])->name('pemesanan.updateStatus');
 
-    Route::get('admin/members', [AdminMemberController::class, 'index'])->name('admin.members.index');
-    Route::get('admin/members/create', [AdminMemberController::class, 'create'])->name('admin.members.create');
-    Route::post('admin/members', [AdminMemberController::class, 'store'])->name('admin.members.store');
-    Route::get('admin/members/{member}/edit', [AdminMemberController::class, 'edit'])->name('admin.members.edit');
-    Route::put('admin/members/{member}', [AdminMemberController::class, 'update'])->name('admin.members.update');
-    Route::delete('admin/members/{member}', [AdminMemberController::class, 'destroy'])->name('admin.members.destroy');
-});
+// Midtrans payment notification webhook endpoint
+Route::post('/midtrans/notification', [AdminPemesananController::class, 'midtransNotification'])->name('midtrans.notification');
+
+
+// ====================================================================
+// B. ROUTE AUTH (LOGIN/REGISTER/LOGOUT)
+// ====================================================================
 
 // Auth
 Route::get('register', [AuthController::class, 'showRegister'])->name('register')->middleware('guest');
@@ -53,22 +60,61 @@ Route::post('password/email', [AuthController::class, 'sendResetLink'])->name('p
 Route::get('password/reset/{token}', [AuthController::class, 'showResetForm'])->name('password.reset');
 Route::post('password/reset', [AuthController::class, 'reset'])->name('password.update');
 
-// Member
-Route::prefix('member')->name('member.')->middleware(['auth'])->group(function(){
-    Route::get('pemesanan', [MemberPemesananController::class, 'index'])->name('pemesanan.index');
 
-    Route::get('pemesanan/create', [MemberPemesananController::class, 'create'])->name('pemesanan.create');
+// ====================================================================
+// C. ROUTE ADMIN
+// ====================================================================
+
+// Protected by auth and IsAdmin middleware
+Route::middleware(['auth', 'is_admin'])->prefix('admin')->group(function () {
+    Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard.index');
+
+    // Kamar: Menggunakan AdminKamarController
+    Route::resource('kamar', AdminKamarController::class, ['as' => 'admin'])->except(['show']);
+    
+    // Pemesanan: Menggunakan AdminPemesananController
+    Route::get('pemesanan', [AdminPemesananController::class, 'index'])->name('admin.pemesanan.index');
+    Route::post('pemesanan/{pemesanan}/status', [AdminPemesananController::class, 'updateStatus'])->name('admin.pemesanan.updateStatus');
+
+    // Review
+    Route::resource('reviews', App\Http\Controllers\Admin\ReviewController::class, ['as' => 'admin'])->only(['index', 'show', 'destroy']);
+
+    // Tipe Kamar
+    Route::resource('tipe-kamar', App\Http\Controllers\Admin\TipeKamarController::class, ['as' => 'admin']);
+
+
+    
+    // Profile Admin
+    Route::get('profile', [AdminProfileController::class, 'show'])->name('admin.profile');
+    Route::put('profile', [AdminProfileController::class, 'update'])->name('admin.profile.update');
+});
+
+
+// ====================================================================
+// D. ROUTE MEMBER
+// ====================================================================
+
+// Protected by auth and ensure_member middleware
+Route::prefix('member')->name('member.')->middleware(['auth', 'ensure_member'])->group(function(){
+    // Member Dashboard
+    Route::get('/', [App\Http\Controllers\Member\DashboardController::class, 'index'])->name('index');
+
+    // Kamar: Menggunakan MemberKamarController
+    Route::get('kamar', [MemberKamarController::class, 'index'])->name('kamar.index');
+    Route::get('kamar/{kamar}', [MemberKamarController::class, 'show'])->name('kamar.show');
+
+    // Pemesanan: Menggunakan Member PemesananController
     Route::post('pemesanan', [MemberPemesananController::class, 'store'])->name('pemesanan.store');
     Route::get('pemesanan/my', [MemberPemesananController::class, 'myBookings'])->name('pemesanan.my');
     Route::get('pemesanan/{pemesanan}', [MemberPemesananController::class, 'show'])->name('pemesanan.show');
     Route::delete('pemesanan/{pemesanan}/cancel', [MemberPemesananController::class, 'cancelBooking'])->name('pemesanan.cancel');
-    Route::post('pemesanan/{pemesanan}/status', [MemberPemesananController::class, 'updateStatus'])->name('pemesanan.updateStatus');
+    
+    // Review
+    Route::get('reviews', [ReviewController::class, 'index'])->name('reviews.index');
     Route::post('reviews', [ReviewController::class, 'store'])->name('reviews.store');
+    
+    // Profile Member
     Route::get('profile', [MemberProfileController::class, 'show'])->name('profile');
+    Route::get('profile/edit', [MemberProfileController::class, 'edit'])->name('profile.edit');
     Route::put('profile', [MemberProfileController::class, 'update'])->name('profile.update');
 });
-
-Route::get('member', [App\Http\Controllers\Member\DashboardController::class, 'index'])->name('member.index')->middleware('auth');
-
-// Midtrans webhook
-Route::post('/midtrans/notification', [MemberPemesananController::class, 'midtransNotification'])->name('midtrans.notification');

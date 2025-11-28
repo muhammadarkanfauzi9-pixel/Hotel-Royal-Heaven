@@ -46,8 +46,8 @@
         {{ request()->routeIs('landing') ? 'font-semibold text-yellow-600 border-b-4 border-yellow-500' : 'font-medium text-gray-900 hover:text-yellow-600' }}">
         Home
     </a>
-    <a href="{{ route('kamar.index') }}" class="px-4 py-2 transition duration-150 text-center 
-        {{ request()->routeIs('kamar.*') ? 'font-semibold text-yellow-600 border-b-4 border-yellow-500' : 'font-medium text-gray-900 hover:text-yellow-600' }}">
+    <a href="{{ route('daftarkamar') }}" class="px-4 py-2 transition duration-150 text-center
+        {{ request()->routeIs('daftarkamar') ? 'font-semibold text-yellow-600 border-b-4 border-yellow-500' : 'font-medium text-gray-900 hover:text-yellow-600' }}">
         Daftar Kamar
     </a>
     <a href="{{ route('landing') }}#about" class="px-4 py-2 font-medium text-gray-900 hover:text-yellow-600 transition duration-150 text-center">

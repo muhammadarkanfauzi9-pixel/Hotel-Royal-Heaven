@@ -22,12 +22,12 @@
             </div>
 
             <div>
-                <label class="block text-sm font-medium text-gray-700">Level</label>
+                <label class="block text-sm font-medium text-gray-700">Role</label>
                 <p class="mt-1">
-                    <span class="px-3 py-1 rounded-full text-xs font-medium 
-                        @if($user->level == 'admin') bg-red-100 text-red-800
+                    <span class="px-3 py-1 rounded-full text-xs font-medium
+                        @if($user->role == 'admin') bg-red-100 text-red-800
                         @else bg-blue-100 text-blue-800 @endif">
-                        {{ ucfirst($user->level) }}
+                        {{ ucfirst($user->role) }}
                     </span>
                 </p>
             </div>

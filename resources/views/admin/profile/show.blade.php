@@ -21,8 +21,8 @@
                 <p class="mt-1 text-gray-900">{{ $user->nohp ?? '-' }}</p>
             </div>
             <div>
-                <label class="block text-sm font-medium text-gray-700">Level</label>
-                <p class="mt-1 text-gray-900">{{ ucfirst($user->level) }}</p>
+                <label class="block text-sm font-medium text-gray-700">Role</label>
+                <p class="mt-1 text-gray-900">{{ ucfirst($user->role) }}</p>
             </div>
             <div>
                 <label class="block text-sm font-medium text-gray-700">Tanggal Bergabung</label>

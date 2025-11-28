@@ -9,7 +9,7 @@
         <div class="bg-white rounded-lg shadow-md p-6">
             <h2 class="text-lg font-semibold text-gray-800 mb-4">Cari Pemesanan</h2>
             
-            <form method="GET" action="{{ route('member.pemesanan.index') }}" class="flex gap-3">
+            <form method="GET" action="{{ route('member.pemesanan.my') }}" class="flex gap-3">
                 <input 
                     type="text" 
                     name="search" 

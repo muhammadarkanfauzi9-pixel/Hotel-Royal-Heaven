@@ -13,15 +13,16 @@ return new class extends Migration
     {
         if (! Schema::hasTable('users')) {
             Schema::create('users', function (Blueprint $table) {
-                $table->id(); // Laravel primary id
-                $table->string('username')->unique(); // username from diagram
-                $table->string('email')->unique()->nullable(); // include email as requested
+                $table->id();
+                $table->string('username')->unique(); 
+                $table->string('email')->unique()->nullable(); 
                 $table->string('password');
-                $table->rememberToken();
                 $table->string('nama_lengkap')->nullable();
-                $table->string('nohp', 15)->nullable();
                 $table->string('nik', 20)->nullable();
-                $table->string('level')->default('member'); // level/role
+                $table->string('nohp', 15)->nullable();
+                $table->string('role')->default('member'); 
+                $table->string('api_token', 80)->nullable()->unique();
+                $table->rememberToken();
                 $table->timestamp('created_at')->useCurrent();
                 $table->timestamp('updated_at')->nullable();
             });

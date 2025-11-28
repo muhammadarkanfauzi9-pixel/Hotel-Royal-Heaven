@@ -67,7 +67,7 @@ class RoomApiController extends Controller
     protected function authorizeAdmin()
     {
         $user = \Illuminate\Support\Facades\Auth::user();
-        if (!$user || (($user->level ?? '') !== 'admin')) {
+        if (!$user || (($user->role ?? '') !== 'admin')) {
             abort(403);
         }
     }

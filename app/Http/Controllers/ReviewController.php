@@ -11,6 +11,19 @@ use Illuminate\Support\Facades\Auth;
 class ReviewController extends Controller
 {
     /**
+     * Display a listing of the user's reviews.
+     */
+    public function index()
+    {
+        $reviews = Review::where('id_user', Auth::id())
+            ->with(['kamar.tipe'])
+            ->latest()
+            ->paginate(10);
+
+        return view('member.reviews.index', compact('reviews'));
+    }
+
+    /**
      * Store a newly created review in storage.
      */
     public function store(Request $request)

@@ -200,11 +200,11 @@
         <!-- Back Button -->
         <div class="flex gap-3">
             @if(auth()->user()->isAdmin())
-                <a href="{{ route('member.pemesanan.index') }}" class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-3 px-4 rounded-lg transition-colors text-center">
+                <a href="{{ route('member.pemesanan.my') }}" class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-3 px-4 rounded-lg transition-colors text-center">
                     Kembali ke Daftar Pemesanan
                 </a>
             @else
-                <a href="{{ route('member.pemesanan.index') }}" class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-3 px-4 rounded-lg transition-colors text-center">
+                <a href="{{ route('member.pemesanan.my') }}" class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-3 px-4 rounded-lg transition-colors text-center">
                     Kembali ke Pemesanan Saya
                 </a>
             @endif

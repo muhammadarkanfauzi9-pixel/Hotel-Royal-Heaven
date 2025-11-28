@@ -18,8 +18,8 @@ class UserController extends Controller
                   ->orWhere('email', 'like', '%'.$request->input('search').'%');
         }
 
-        if ($request->filled('level')) {
-            $query->where('level', $request->input('level'));
+        if ($request->filled('role')) {
+            $query->where('role', $request->input('role'));
         }
 
         $users = $query->paginate(15);
@@ -45,7 +45,7 @@ class UserController extends Controller
         $data = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,'.$user->id,
-            'level' => 'required|in:member,admin',
+            'role' => 'required|in:member,admin',
             'nohp' => 'nullable|string|max:15',
             'nik' => 'nullable|string|max:20',
         ]);

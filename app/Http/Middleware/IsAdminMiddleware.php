@@ -19,8 +19,8 @@ class IsAdminMiddleware
             return redirect()->route('login')->with('error', 'Anda harus login terlebih dahulu.');
         }
 
-        // Cek apakah user adalah admin berdasarkan kolom 'level'
-        if (Auth::user()->level !== 'admin') {
+        // Cek apakah user adalah admin berdasarkan kolom 'role'
+        if (Auth::user()->role !== 'admin') {
             return redirect('/')->with('error', 'Anda tidak memiliki akses ke halaman admin.');
         }
 

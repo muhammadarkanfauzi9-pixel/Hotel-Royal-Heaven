@@ -23,7 +23,7 @@ class AuthApiController extends Controller
             'username' => $data['username'],
             'email' => $data['email'] ?? null,
             'password' => Hash::make($data['password']),
-            'level' => 'member',
+            'role' => 'member',
         ]);
 
         $user->api_token = Str::random(60);

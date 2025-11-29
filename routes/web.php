@@ -38,6 +38,9 @@ Route::get('/daftarkamar/{kamar}', [MemberKamarController::class, 'show'])->name
 // About
 Route::get('/about', fn() => view('about'))->name('about');
 
+// Contact Us
+Route::get('/contact', fn() => view('contact'))->name('contact');
+
 
 // Midtrans payment notification webhook endpoint
 Route::post('/midtrans/notification', [AdminPemesananController::class, 'midtransNotification'])->name('midtrans.notification');
@@ -112,7 +115,13 @@ Route::prefix('member')->name('member.')->middleware(['auth', 'ensure_member'])-
     // Review
     Route::get('reviews', [ReviewController::class, 'index'])->name('reviews.index');
     Route::post('reviews', [ReviewController::class, 'store'])->name('reviews.store');
-    
+
+    // Wishlist
+    Route::get('wishlist', [App\Http\Controllers\Member\WishlistController::class, 'index'])->name('wishlist.index');
+    Route::post('wishlist', [App\Http\Controllers\Member\WishlistController::class, 'store'])->name('wishlist.store');
+    Route::delete('wishlist/{id_kamar}', [App\Http\Controllers\Member\WishlistController::class, 'destroy'])->name('wishlist.destroy');
+    Route::get('wishlist/check/{id_kamar}', [App\Http\Controllers\Member\WishlistController::class, 'check'])->name('wishlist.check');
+
     // Profile Member
     Route::get('profile', [MemberProfileController::class, 'show'])->name('profile');
     Route::get('profile/edit', [MemberProfileController::class, 'edit'])->name('profile.edit');

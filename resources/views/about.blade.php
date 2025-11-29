@@ -1,42 +1,19 @@
 @extends('layouts.app')
 @section('page_title', 'About Us')
 @section('content')
-    {{-- HERO SECTION --}}
-    <div class="relative bg-yellow-500 h-450 overflow-hidden">
-        <div class="max-w-7xl mx-auto">
-            <div class="relative z-10 pb-8 bg-yellow-500 sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32">
-                <svg class="hidden lg:block absolute right-0 inset-y-0 h-full w-52 text-white transform translate-x-2/4" fill="currentColor" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-                    <polygon points="50,0 100,0 50,100 0,100" />
-                </svg>
-
-                <main class="pt-40 pb-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 xl:pt-48 xl:pb-10">
-                    <div class="sm:text-center lg:text-left">
-                        <h1 class="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
-                            About Us
-                        </h1>
-                        <p class="mt-3 text-base text-gray-800 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-9 md:text-xl lg:mx-0">
-                            Providing an unforgettable stay experience with a touch of 
-                            luxury and the best service for each of our guests.
-                        </p>
-                        <div class="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
-                            <div class="rounded-md shadow">
-                                <a href="#" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-yellow-700 hover:bg-yellow-800 md:py-4 md:text-lg md:px-10">
-                                    Explore More
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </main>
-            </div>
-        </div>
+    @include('components.hero-about', [
+        'title' => 'About Royal Heaven Hotel',
+        'subtitle' => 'Discover Our Story',
+        'description' => 'Experience unparalleled luxury and hospitality at Royal Heaven Hotel. A place where every moment is crafted for your comfort and satisfaction.',
+        'ctaText' => 'Learn More About Us',
+        'ctaLink' => '#our-story-section'
+    ])
         
-        <div class="lg:absolute lg:inset-y-0 lg:right-0 lg:w-[90%]">
-            <img src="{{ asset('user/lobbyhtl (1).jpg') }}" alt="Hotel Pool" class="absolute inset-0 w-full h-full object-cover" />
-        </div>
-    </div>
+        
+    
 
     {{-- OUR STORY SECTION --}}
-    <section class="py-16 bg-gray-50">
+    <section id="our-story-section" class="py-16 bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="lg:grid lg:grid-cols-2 lg:gap-16 items-center">
                 <div class="mb-10 lg:mb-0">
@@ -64,7 +41,7 @@
                 </div>
                 <div class="relative">
                     <div class="aspect-w-3 aspect-h-2 rounded-2xl overflow-hidden shadow-2xl">
-                        <img class="object-cover w-full h-full" src="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Hotel Exterior">
+                        <img class="object-cover w-full h-full" src="user/royalheaven.png" alt="Hotel Exterior">
                     </div>
                 </div>
             </div>

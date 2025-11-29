@@ -8,7 +8,7 @@
 karena sudah ada di 'layouts.app' --}}
 
     {{-- Header dipisah ke komponen --}}
-    @include('components.Navbar')
+    
 
     {{-- HERO SECTION --}}
     {{-- Menggunakan komponen Blade seperti kode asli dan mengisi data (props) --}}
@@ -26,16 +26,16 @@ karena sudah ada di 'layouts.app' --}}
     <hr class="max-w-7xl mx-auto border-gray-200 my-8">
 
     {{-- START: A Little About Us Section (Mengambil desain dari kode kedua Anda) --}}
-    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 animate-on-scroll">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-            
+
             {{-- Kiri: Teks dan Deskripsi --}}
             <div class="pr- lg:pr-6">
                 <h2 class="text-3xl font-extrabold mb-3 text-gray-900">
                     A <span class="text-yellow-500">little</span> about us
                 </h2>
                 <p class="text-base text-gray-600 leading-relaxed mb-4">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut perspiciatis unde omnis iste 
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut perspiciatis unde omnis iste
                     natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.
                 </p>
                 <p class="text-base text-gray-600 leading-relaxed">
@@ -45,21 +45,21 @@ karena sudah ada di 'layouts.app' --}}
             </div>
 
             {{-- Kanan: Grid Gambar (Diambil dari kode kedua Anda) --}}
-            <div class="grid grid-cols-2 grid-rows-2 gap-4 min-h-[300px]">
-                
+            <div class="image-gallery grid grid-cols-2 grid-rows-2 gap-4 min-h-[300px]">
+
                 {{-- Placeholder Atas Kiri --}}
                 <div class="rounded-2xl h-48 bg-gray-300 relative overflow-hidden">
-                    <img src="{{ asset('user/ruangkanan.jpg') }}" alt="Kamar Deluxe" class="absolute inset-0 w-full h-full object-cover">
+                    <img src="{{ asset('user/ruangkanan.jpg') }}" alt="Kamar Deluxe" class="absolute inset-0 w-full h-full object-cover lazy" data-src="{{ asset('user/ruangkanan.jpg') }}">
                 </div>
 
                 {{-- Placeholder Atas Kanan --}}
                 <div class="rounded-2xl h-48 bg-gray-300 relative overflow-hidden">
-                    <img src="{{ asset('user/ruangkiri.jpg') }}" alt="Kolam Renang" class="absolute inset-0 w-full h-full object-cover">
+                    <img src="{{ asset('user/ruangkiri.jpg') }}" alt="Kolam Renang" class="absolute inset-0 w-full h-full object-cover lazy" data-src="{{ asset('user/ruangkiri.jpg') }}">
                 </div>
-                
+
                 {{-- Placeholder Besar Bawah (Col Span 2) --}}
                 <div class="col-span-2 rounded-2xl h-48 bg-gray-300 relative overflow-hidden">
-                    <img src="{{ asset('user/fotoblokbawah.avif') }}" alt="Lobi Hotel Utama" class="absolute inset-0 w-full h-full object-cover">
+                    <img src="{{ asset('user/fotoblokbawah.avif') }}" alt="Lobi Hotel Utama" class="absolute inset-0 w-full h-full object-cover lazy" data-src="{{ asset('user/fotoblokbawah.avif') }}">
                 </div>
             </div>
 

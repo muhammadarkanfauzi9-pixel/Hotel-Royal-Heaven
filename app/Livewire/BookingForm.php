@@ -38,12 +38,14 @@ class BookingForm extends Component
     {
         $this->kamars = Kamar::with('tipe')->where('status_ketersediaan', 'available')->get();
         $this->selectedKamarId = $selectedKamarId;
-        
+
         $user = Auth::user();
-        $this->nama = $user->nama_lengkap;
-        $this->nik = $user->nik;
-        $this->nohp = $user->nohp;
-        
+        if ($user) {
+            $this->nama = $user->nama_lengkap;
+            $this->nik = $user->nik;
+            $this->nohp = $user->nohp;
+        }
+
         if ($this->selectedKamarId) {
             $this->calculateTotal();
         }

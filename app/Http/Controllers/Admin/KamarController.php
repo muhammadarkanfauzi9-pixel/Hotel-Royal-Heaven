@@ -43,7 +43,7 @@ class KamarController extends Controller
             $numericPart = preg_replace('/[^0-9]/', '', $lastRoom->nomor_kamar);
             $nextNumber = intval($numericPart) + 1;
         } else {
-            $nextNumber = 101;
+            $nextNumber = 1;
         }
         $generatedRoomNumber = str_pad($nextNumber, 3, '0', STR_PAD_LEFT);
 
@@ -68,7 +68,7 @@ class KamarController extends Controller
             $numericPart = preg_replace('/[^0-9]/', '', $lastRoom->nomor_kamar);
             $nextNumber = intval($numericPart) + 1;
         } else {
-            $nextNumber = 101;
+            $nextNumber = 1;
         }
         $data['nomor_kamar'] = str_pad($nextNumber, 3, '0', STR_PAD_LEFT);
 

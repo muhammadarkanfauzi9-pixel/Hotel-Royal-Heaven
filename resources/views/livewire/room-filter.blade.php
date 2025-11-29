@@ -7,7 +7,7 @@
             </div>
             <input wire:model.live.debounce.300ms="search" type="text" placeholder="Search by name or room type..." class="block w-full pl-10 pr-3 py-2.5 border-none rounded-lg bg-gray-200 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-yellow-500 sm:text-sm">
         </div>
-        
+
         <div class="w-full md:w-48">
             <select wire:model.live="type" class="block w-full py-2.5 px-3 border-none rounded-lg bg-gray-200 text-gray-900 focus:outline-none focus:ring-2 focus:ring-yellow-500 sm:text-sm">
                 <option value="">All type</option>
@@ -57,19 +57,19 @@
                             <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                         </div>
                     @endif
-                    
+
                     {{-- Options Menu (dots) --}}
                     <button class="absolute top-4 right-4 text-white hover:text-gray-200">
                         <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path></svg>
                     </button>
                 </div>
-                
+
                 <div class="p-6 flex flex-col flex-grow">
                     <h3 class="text-2xl font-bold text-gray-900 mb-2">Kamar {{ $room->nomor_kamar }}</h3>
                     <p class="text-gray-500 text-sm line-clamp-2 mb-4 flex-grow">
                         {{ $room->deskripsi }}
                     </p>
-                    
+
                     <div class="space-y-1 mb-6">
                         <div class="flex items-center gap-2">
                             <span class="text-xs font-bold text-yellow-600 uppercase">Price</span>
@@ -80,15 +80,15 @@
                             <span class="text-sm font-medium text-gray-500">{{ $room->tipe->nama_tipe }}</span>
                         </div>
                     </div>
-                    
+
                     <div class="grid grid-cols-2 gap-4 mt-auto">
                         <a href="{{ route('member.kamar.show', $room) }}" class="px-4 py-2.5 text-center text-sm font-semibold text-gray-700 border border-gray-400 rounded-full hover:bg-white hover:border-gray-500 transition">
                             Detail
                         </a>
                         @if($room->status_ketersediaan === 'available')
-                            <a href="{{ route('member.pemesanan.create', ['kamar' => $room->id_kamar]) }}" class="px-4 py-2.5 text-center text-sm font-semibold text-white bg-yellow-500 rounded-full hover:bg-yellow-600 transition shadow-md shadow-yellow-200">
+                            <button onclick="openBookingModal({{ $room->id_kamar }})" class="px-4 py-2.5 text-center text-sm font-semibold text-white bg-yellow-500 rounded-full hover:bg-yellow-600 transition shadow-md shadow-yellow-200">
                                 Booking Now
-                            </a>
+                            </button>
                         @else
                              <button disabled class="px-4 py-2.5 text-center text-sm font-semibold text-white bg-gray-400 rounded-full cursor-not-allowed">
                                 Booked
@@ -103,4 +103,64 @@
             {{ $kamars->links() }}
         </div>
     @endif
+
+    <!-- Booking Modal -->
+    <div id="bookingModal" class="fixed inset-0 z-50 overflow-y-auto hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <!-- Background overlay -->
+            <div id="modalBackdrop" class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+
+            <!-- Modal panel -->
+            <div id="modalPanel" class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full">
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
+                            Form Pemesanan Kamar
+                        </h3>
+                        <button id="closeModalBtn" class="text-gray-400 hover:text-gray-600 transition-colors">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div class="max-h-96 overflow-y-auto">
+                        <livewire:booking-form :selectedKamarId="$selectedKamarId ?? null" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedKamarId = null;
+
+        function openBookingModal(kamarId) {
+            selectedKamarId = kamarId;
+            const modal = document.getElementById('bookingModal');
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+
+            // Update Livewire component with selected room
+            if (window.livewire) {
+                window.livewire.find('booking-form').set('selectedKamarId', kamarId);
+            }
+        }
+
+        function closeBookingModal() {
+            const modal = document.getElementById('bookingModal');
+            modal.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+            selectedKamarId = null;
+        }
+
+        // Event listeners
+        document.getElementById('closeModalBtn').addEventListener('click', closeBookingModal);
+        document.getElementById('modalBackdrop').addEventListener('click', closeBookingModal);
+
+        // Listen for booking success event
+        window.addEventListener('booking-success', function() {
+            closeBookingModal();
+        });
+    </script>
 </div>

@@ -34,7 +34,7 @@
                     <div>
                         <label for="email" class="sr-only">Email</label>
                         <input name="email" id="email" type="email" required placeholder="Email" value="{{ old('email') }}" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-yellow-500 @error('email') border-red-500 @enderror">
-                        @error('email')<span class="text-sm text-red-500 mt-1 block">Incorrect email or password please check and try again.</span>@enderror
+                        @error('email')<span class="text-sm text-red-500 mt-1 block">Incorrect email or password please check and tryagain.</span>@enderror
                     </div>
 
                     <div>

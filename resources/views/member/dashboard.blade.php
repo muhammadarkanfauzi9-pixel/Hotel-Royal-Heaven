@@ -174,4 +174,31 @@
         </div>
     </div>
 </div>
+
+<script>
+function toggleSection(header) {
+    const section = header.closest('.collapsible-section');
+    const content = section.querySelector('.collapsible-content');
+    const icon = header.querySelector('svg');
+
+    content.classList.toggle('collapsed');
+    icon.classList.toggle('rotate-180');
+}
+</script>
+
+<style>
+.collapsible-content {
+    max-height: 1000px;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+}
+
+.collapsible-content.collapsed {
+    max-height: 0;
+}
+
+.rotate-180 {
+    transform: rotate(180deg);
+}
+</style>
 @endsection

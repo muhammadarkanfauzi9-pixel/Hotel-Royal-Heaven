@@ -32,14 +32,74 @@ class KamarPublikController extends Controller // <<< Perubahan NAMA CLASS
      */
     public function index(Request $request): View
     {
-        $kamars = Kamar::with('tipe')->paginate(12);
+        $query = Kamar::with('tipe')->where('status_ketersediaan', 'available');
+
+        // Apply search filter
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('nomor_kamar', 'like', '%' . $search . '%')
+                  ->orWhere('deskripsi', 'like', '%' . $search . '%')
+                  ->orWhereHas('tipe', function ($q) use ($search) {
+                      $q->where('nama_tipe', 'like', '%' . $search . '%');
+                  });
+            });
+        }
+
+        // Apply room type filter
+        if ($request->filled('tipe_kamar')) {
+            $query->where('id_tipe', $request->tipe_kamar);
+        }
+
+        // Apply status filter
+        if ($request->filled('status')) {
+            $query->where('status_ketersediaan', $request->status);
+        }
+
+        // Apply price range filters
+        if ($request->filled('harga_min')) {
+            $query->whereHas('tipe', function ($q) use ($request) {
+                $q->where('harga_dasar', '>=', $request->harga_min);
+            });
+        }
+
+        if ($request->filled('harga_max')) {
+            $query->whereHas('tipe', function ($q) use ($request) {
+                $q->where('harga_dasar', '<=', $request->harga_max);
+            });
+        }
+
+        // Apply sorting
+        $sort = $request->get('sort', 'latest');
+        switch ($sort) {
+            case 'name':
+                $query->orderBy('nomor_kamar', 'asc');
+                break;
+            case 'price_low':
+                $query->join('tipe_kamar', 'kamar.id_tipe', '=', 'tipe_kamar.id_tipe')
+                      ->orderBy('tipe_kamar.harga_dasar', 'asc')
+                      ->select('kamar.*');
+                break;
+            case 'price_high':
+                $query->join('tipe_kamar', 'kamar.id_tipe', '=', 'tipe_kamar.id_tipe')
+                      ->orderBy('tipe_kamar.harga_dasar', 'desc')
+                      ->select('kamar.*');
+                break;
+            case 'latest':
+            default:
+                $query->orderBy('created_at', 'desc');
+                break;
+        }
+
+        $kamars = $query->paginate(12)->withQueryString();
+        $tipeKamars = \App\Models\TipeKamar::all();
 
         // Check if this is member route
         if ($request->is('member/kamar')) {
             return view('Member.kamar.index', compact('kamars'));
         }
 
-        return view('kamar.index');
+        return view('kamar.index', compact('kamars', 'tipeKamars'));
     }
 
     /**

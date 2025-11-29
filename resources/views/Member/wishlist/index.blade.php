@@ -114,95 +114,9 @@
 
         @if($wishlists->count() > 0)
             <!-- Wishlist Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
                 @foreach($wishlists as $wishlist)
-                    <div class="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-lg transition-shadow duration-300">
-                        <!-- Room Image -->
-                        <div class="relative">
-                            @php
-                                $images = [];
-                                if ($wishlist->kamar->foto_kamar) {
-                                    $images[] = $wishlist->kamar->foto_kamar;
-                                }
-                                if ($wishlist->kamar->foto_detail && is_array($wishlist->kamar->foto_detail)) {
-                                    $images = array_merge($images, $wishlist->kamar->foto_detail);
-                                }
-                            @endphp
-                            @if(count($images) > 0)
-                                <img src="{{ asset('storage/' . $images[0]) }}"
-                                     alt="{{ $wishlist->kamar->nomor_kamar }}"
-                                     class="w-full h-48 object-cover">
-                            @else
-                                <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
-                                    <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
-                                    </svg>
-                                </div>
-                            @endif
-
-                            <!-- Availability Badge -->
-                            <div class="absolute top-3 right-3">
-                                @if($wishlist->kamar->status_ketersediaan === 'available')
-                                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                        Tersedia
-                                    </span>
-                                @else
-                                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                                        Tidak Tersedia
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <!-- Room Info -->
-                        <div class="p-4">
-                            <h3 class="text-lg font-semibold text-gray-900 mb-1">{{ $wishlist->kamar->nomor_kamar }}</h3>
-                            <p class="text-gray-600 text-sm mb-3">{{ $wishlist->kamar->tipe->nama_tipe }}</p>
-
-                            <!-- Room Specs -->
-                            <div class="flex items-center justify-between text-sm text-gray-600 mb-4">
-                                <div class="flex items-center">
-                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
-                                    </svg>
-                                    {{ $wishlist->kamar->tipe->kapasitas }} orang
-                                </div>
-                                <div class="flex items-center">
-                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
-                                    </svg>
-                                    {{ $wishlist->kamar->tipe->luas }} m²
-                                </div>
-                            </div>
-
-                            <!-- Price -->
-                            <div class="text-center mb-4">
-                                <div class="text-2xl font-bold text-gray-900">
-                                    Rp {{ number_format($wishlist->kamar->tipe->harga_dasar, 0, ',', '.') }}
-                                </div>
-                                <div class="text-sm text-gray-600">per malam</div>
-                            </div>
-
-                            <!-- Action Buttons -->
-                            <div class="flex space-x-2">
-                                <a href="{{ route('member.kamar.show', $wishlist->kamar->id_kamar) }}"
-                                   class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2 px-4 rounded-lg transition-colors duration-200 text-center text-sm">
-                                    Lihat Detail
-                                </a>
-                                @if($wishlist->kamar->status_ketersediaan === 'available')
-                                    <button onclick="openBookingModal({{ $wishlist->kamar->id_kamar }})"
-                                            class="flex-1 bg-yellow-500 hover:bg-yellow-600 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 text-sm">
-                                        Pesan
-                                    </button>
-                                @else
-                                    <button disabled
-                                            class="flex-1 bg-gray-300 text-gray-500 font-medium py-2 px-4 rounded-lg cursor-not-allowed text-sm">
-                                        Tidak Tersedia
-                                    </button>
-                                @endif
-                            </div>
-                        </div>
-                    </div>
+                    <x-room-card :kamar="$wishlist->kamar" :showWishlist="true" />
                 @endforeach
             </div>
 

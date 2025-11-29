@@ -1,107 +1,114 @@
 <div>
-    <!-- Filter Form -->
-    <div class="bg-white p-6 rounded-lg shadow-md mb-6">
-        <h3 class="text-lg font-semibold mb-4">Filter Kamar</h3>
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <!-- Search -->
-            <div>
-                <label for="search" class="block text-sm font-medium text-gray-700">Cari</label>
-                <input type="text" wire:model.live="search" id="search" placeholder="Nomor kamar atau deskripsi"
-                       class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+    <!-- Filter Section -->
+    <div class="bg-white rounded-lg shadow-sm p-4 mb-6">
+        <form method="GET" action="{{ route('daftarkamar') }}" class="space-y-3">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+                {{-- Search Input --}}
+                <div class="lg:col-span-2">
+                    <label for="search" class="block text-xs font-medium text-gray-700 mb-1">Cari Kamar</label>
+                    <div class="relative">
+                        <input type="text" name="search" id="search" value="{{ request('search') }}"
+                               placeholder="Cari berdasarkan nomor kamar atau tipe..."
+                               class="w-full pl-8 pr-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-yellow-500 focus:border-transparent">
+                        <div class="absolute inset-y-0 left-0 pl-2 flex items-center pointer-events-none">
+                            <svg class="h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Room Type Filter --}}
+                <div>
+                    <label for="tipe_kamar" class="block text-xs font-medium text-gray-700 mb-1">Tipe Kamar</label>
+                    <select name="tipe_kamar" id="tipe_kamar"
+                            class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-yellow-500 focus:border-transparent">
+                        <option value="">Semua Tipe</option>
+                        @foreach($tipeKamars as $tipe)
+                            <option value="{{ $tipe->id_tipe }}" {{ request('tipe_kamar') == $tipe->id_tipe ? 'selected' : '' }}>
+                                {{ $tipe->nama_tipe }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                {{-- Availability Filter --}}
+                <div>
+                    <label for="status" class="block text-xs font-medium text-gray-700 mb-1">Status</label>
+                    <select name="status" id="status"
+                            class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-yellow-500 focus:border-transparent">
+                        <option value="">Semua Status</option>
+                        <option value="available" {{ request('status') == 'available' ? 'selected' : '' }}>Tersedia</option>
+                        <option value="unavailable" {{ request('status') == 'unavailable' ? 'selected' : '' }}>Tidak Tersedia</option>
+                    </select>
+                </div>
             </div>
 
-            <!-- Type Filter -->
-            <div>
-                <label for="type" class="block text-sm font-medium text-gray-700">Tipe Kamar</label>
-                <select wire:model.live="type" id="type" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
-                    <option value="">Semua Tipe</option>
-                    @foreach($tipeKamars as $tipe)
-                        <option value="{{ $tipe->id_tipe }}">{{ $tipe->nama_tipe }}</option>
-                    @endforeach
-                </select>
+            {{-- Price Range and Sort --}}
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                <div>
+                    <label for="harga_min" class="block text-xs font-medium text-gray-700 mb-1">Harga Min</label>
+                    <input type="number" name="harga_min" id="harga_min" value="{{ request('harga_min') }}"
+                           placeholder="Rp 0"
+                           class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-yellow-500 focus:border-transparent">
+                </div>
+                <div>
+                    <label for="harga_max" class="block text-xs font-medium text-gray-700 mb-1">Harga Max</label>
+                    <input type="number" name="harga_max" id="harga_max" value="{{ request('harga_max') }}"
+                           placeholder="Rp 9999999"
+                           class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-yellow-500 focus:border-transparent">
+                </div>
+                <div>
+                    <label for="sort" class="block text-xs font-medium text-gray-700 mb-1">Urutkan</label>
+                    <select name="sort" id="sort"
+                            class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-yellow-500 focus:border-transparent">
+                        <option value="latest" {{ request('sort', 'latest') == 'latest' ? 'selected' : '' }}>Terbaru</option>
+                        <option value="name" {{ request('sort') == 'name' ? 'selected' : '' }}>Nama (A-Z)</option>
+                        <option value="price_low" {{ request('sort') == 'price_low' ? 'selected' : '' }}>Harga Rendah</option>
+                        <option value="price_high" {{ request('sort') == 'price_high' ? 'selected' : '' }}>Harga Tinggi</option>
+                    </select>
+                </div>
             </div>
 
-            <!-- Min Price -->
-            <div>
-                <label for="min_price" class="block text-sm font-medium text-gray-700">Harga Min</label>
-                <input type="number" wire:model.live="min_price" id="min_price" placeholder="Harga minimum"
-                       class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+            {{-- Action Buttons --}}
+            <div class="flex flex-col sm:flex-row gap-3 pt-3 border-t border-gray-200">
+                <button type="submit"
+                        class="inline-flex items-center px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white font-medium text-sm rounded-md transition-colors duration-200">
+                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                    Cari & Filter
+                </button>
+                <a href="{{ route('daftarkamar') }}"
+                   class="inline-flex items-center px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium text-sm rounded-md transition-colors duration-200">
+                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                    Reset
+                </a>
+                @if(request()->hasAny(['search', 'tipe_kamar', 'status', 'harga_min', 'harga_max', 'sort']))
+                    <div class="text-xs text-gray-600 flex items-center ml-auto">
+                        <span>{{ $kamars->total() }} hasil</span>
+                    </div>
+                @endif
             </div>
-
-            <!-- Max Price -->
-            <div>
-                <label for="max_price" class="block text-sm font-medium text-gray-700">Harga Max</label>
-                <input type="number" wire:model.live="max_price" id="max_price" placeholder="Harga maksimum"
-                       class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
-            </div>
-        </div>
+        </form>
     </div>
 
     <!-- Rooms Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         @forelse($kamars as $kamar)
-            <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                <!-- Room Image -->
-                <div class="aspect-w-16 aspect-h-9">
-                    @php
-                        $image = $kamar->foto_kamar ?: 'user/GambarHeroSection.jpg';
-                    @endphp
-                    <img src="{{ asset('storage/' . $image) }}" alt="{{ $kamar->nomor_kamar }}" class="w-full h-48 object-cover">
-                </div>
-
-                <div class="p-6">
-                    <h4 class="text-xl font-semibold mb-2">{{ $kamar->nomor_kamar }}</h4>
-                    <p class="text-gray-600 mb-2">{{ $kamar->tipe->nama_tipe }}</p>
-                    <p class="text-sm text-gray-500 mb-4">{{ Str::limit($kamar->deskripsi, 100) }}</p>
-                    <div class="flex justify-between items-center mb-4">
-                        <span class="text-lg font-bold text-blue-600">Rp {{ number_format($kamar->tipe->harga_dasar, 0, ',', '.') }}</span>
-                        <span class="px-2 py-1 text-xs rounded-full {{ $kamar->status_ketersediaan === 'available' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
-                            {{ $kamar->status_ketersediaan === 'available' ? 'Tersedia' : 'Tidak Tersedia' }}
-                        </span>
-                    </div>
-
-                    {{-- Action Buttons --}}
-                    <div class="flex space-x-3">
-                        {{-- Detail Button --}}
-                        <a href="{{ route('daftarkamar.show', $kamar) }}" class="flex-1 text-center px-4 py-2 rounded-lg text-gray-700 bg-gray-100 border border-gray-300 hover:bg-gray-200 transition font-medium">
-                            Detail
-                        </a>
-
-                        {{-- Book Now Button --}}
-                        @if($kamar->status_ketersediaan === 'available')
-                            @auth
-                                @if(auth()->user()->role === 'member')
-                                    <button onclick="openBookingModal({{ $kamar->id_kamar }})"
-                                       class="flex-1 text-center px-4 py-2 rounded-lg bg-yellow-600 text-white shadow-lg shadow-yellow-500/50 hover:bg-yellow-700 transition font-medium transform hover:-translate-y-0.5">
-                                        Pesan Sekarang
-                                    </button>
-                                @else
-                                    <a href="{{ route('login') }}" class="flex-1 text-center px-4 py-2 rounded-lg bg-yellow-600 text-white shadow-lg shadow-yellow-500/50 hover:bg-yellow-700 transition font-medium transform hover:-translate-y-0.5">
-                                        Pesan Sekarang
-                                    </a>
-                                @endif
-                            @else
-                                <a href="{{ route('login') }}" class="flex-1 text-center px-4 py-2 rounded-lg bg-yellow-600 text-white shadow-lg shadow-yellow-500/50 hover:bg-yellow-700 transition font-medium transform hover:-translate-y-0.5">
-                                    Pesan Sekarang
-                                </a>
-                            @endauth
-                        @else
-                            <button disabled class="flex-1 text-center px-4 py-2 rounded-lg bg-red-400 text-white font-medium cursor-not-allowed opacity-70">
-                                Tidak Tersedia
-                            </button>
-                        @endif
-                    </div>
-                </div>
-            </div>
+            <x-room-card :kamar="$kamar" :showWishlist="false" />
         @empty
-            <div class="col-span-full text-center py-8">
-                <p class="text-gray-500">Tidak ada kamar yang ditemukan.</p>
+            <div class="col-span-full text-center py-16">
+                <div class="mx-auto w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-6">
+                    <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900 mb-2">No Rooms Found</h3>
+                <p class="text-gray-600">Try adjusting your search criteria or filters.</p>
             </div>
         @endforelse
-    </div>
-
-    <!-- Pagination -->
-    <div class="mt-8">
-        {{ $kamars->links() }}
     </div>
 </div>

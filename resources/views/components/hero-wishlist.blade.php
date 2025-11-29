@@ -14,7 +14,7 @@
 <section class="relative w-full min-h-[600px] lg:h-screen flex items-center overflow-hidden bg-gradient-to-br from-gray-900 via-gray-800 to-black pt-24 lg:pt-32">
     {{-- Background with Diagonal Split using Linear Gradient --}}
     <div class="absolute inset-0 z-0 hidden lg:block parallax"
-         style="background: linear-gradient({{ $angle }}deg, {{ $bgHex }} 0%, {{ $bgHex }} {{ $splitPercent }}%, transparent {{ $splitPercent }}.1%, transparent 100%), url('{{ asset('storage/' . $image) }}');
+         style="background: linear-gradient({{ $angle }}deg, {{ $bgHex }} 0%, {{ $bgHex }} {{ $splitPercent }}%, transparent {{ $splitPercent }}.1%, transparent 100%), url('{{ $image }}');
                 background-size: cover;
                 background-position: center;"
          data-parallax="0.3">
@@ -25,7 +25,7 @@
     {{-- Mobile Background (Stacked) --}}
     <div class="absolute inset-0 z-0 lg:hidden">
         <div class="absolute inset-0 bg-gradient-to-br from-yellow-600 to-yellow-800 opacity-95 z-10"></div>
-        <img src="{{ asset('storage/' . $image) }}" class="absolute inset-0 w-full h-full object-cover opacity-20 z-0" alt="Background">
+        <img src="{{ $image }}" class="absolute inset-0 w-full h-full object-cover opacity-20 z-0" alt="Background">
         {{-- Mobile overlay --}}
         <div class="absolute inset-0 bg-black bg-opacity-30 z-5"></div>
     </div>

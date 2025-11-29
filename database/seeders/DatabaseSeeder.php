@@ -22,5 +22,9 @@ class DatabaseSeeder extends Seeder
 
         // Create admin user via seeder (env-driven)
         $this->call(AdminUserSeeder::class);
+
+        // Create room types and rooms
+        $this->call(TipeKamarSeeder::class);
+        $this->call(RoomSeeder::class);
     }
 }

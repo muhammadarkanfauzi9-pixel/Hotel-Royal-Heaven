@@ -38,6 +38,13 @@ Route::get('/daftarkamar/{kamar}', [MemberKamarController::class, 'show'])->name
 // About
 Route::get('/about', fn() => view('about'))->name('about');
 
+// --- START: PENAMBAHAN ROUTE BARU UNTUK SINCERE HOSPITALITY (SUDAH DIKOREKSI LOKASINYA) ---
+// Sincere Hospitality
+// KOREKSI: Panggilan view diubah menjadi 'commitmentaboutus.hospitality'
+Route::get('/sincere-hospitality', fn() => view('comitmentaboutus.hospitality'))->name('hospitality');
+// --- END: PENAMBAHAN ROUTE BARU ---
+
+
 // Contact Us
 Route::get('/contact', [App\Http\Controllers\ContactController::class, 'index'])->name('contact');
 Route::post('/contact', [App\Http\Controllers\ContactController::class, 'store'])->name('contact.store');

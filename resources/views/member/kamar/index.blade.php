@@ -5,7 +5,7 @@
 @section('content')
 
 {{-- TEMPATKAN PEMANGGILAN NAVBAR ANDA DI SINI --}}
-@include('components.Navbar')
+
 @include('components.herosectionkamar')
 
 {{-- Search/Filter Bar --}}

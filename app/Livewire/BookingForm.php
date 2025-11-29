@@ -60,6 +60,12 @@ class BookingForm extends Component
         }
     }
 
+    public function setSelectedRoom($kamarId)
+    {
+        $this->selectedKamarId = $kamarId;
+        $this->calculateTotal();
+    }
+
     public function calculateTotal()
     {
         if ($this->selectedKamarId && $this->tgl_check_in && $this->tgl_check_out) {

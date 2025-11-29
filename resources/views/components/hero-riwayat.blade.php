@@ -72,10 +72,5 @@
         </div>
     </div>
 
-    {{-- Scroll Indicator --}}
-    <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10 animate-bounce">
-        <div class="w-6 h-10 border-2 border-white border-opacity-50 rounded-full flex justify-center">
-            <div class="w-1 h-3 bg-white bg-opacity-50 rounded-full mt-2 animate-pulse"></div>
-        </div>
-    </div>
+
 </section>

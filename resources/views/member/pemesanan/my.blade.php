@@ -3,7 +3,20 @@
 @section('page_title', 'Riwayat Pemesanan')
 
 @section('content')
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+<x-hero-pemesanan
+    :pemesanan="$pemesanan"
+    title="Riwayat Pemesanan"
+    subtitle="Kelola Pesanan Anda"
+    description="Pantau dan kelola semua riwayat pemesanan kamar hotel Anda dengan mudah."
+    image="user/GambarHeroSection.jpg"
+    ctaText="Lihat Semua Pesanan"
+    ctaLink="#booking-list"
+    splitPercent="55"
+    angle="75"
+    bgHex="#E3A008"
+/>
+
+<div id="booking-list" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
     <!-- Header -->
     <div class="text-center mb-12">
         <h1 class="text-4xl font-bold text-gray-900 mb-4">Order History</h1>
@@ -12,21 +25,62 @@
 
     <!-- Search Bar -->
     <div class="mb-8">
-        <div class="relative">
-            <input type="text" placeholder="Search by booking code or room name..." class="w-full bg-gray-100 border-none rounded-lg py-3 px-4 pl-12 text-gray-700 focus:ring-2 focus:ring-yellow-500">
+        <form method="GET" action="{{ route('member.pemesanan.my') }}" class="relative">
+            <input type="text" name="search" value="{{ request('search') }}" placeholder="Search by booking code, name, or room..." class="w-full bg-gray-100 border-none rounded-lg py-3 px-4 pl-12 text-gray-700 focus:ring-2 focus:ring-yellow-500 focus:bg-white transition">
             <div class="absolute left-4 top-3.5 text-gray-400">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
             </div>
-        </div>
+            @if(request('search'))
+                <a href="{{ route('member.pemesanan.my') }}" class="absolute right-4 top-3.5 text-gray-400 hover:text-gray-600">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </a>
+            @endif
+        </form>
     </div>
 
     <!-- Tabs -->
     <div class="flex space-x-1 bg-gray-100 p-1 rounded-xl mb-8 overflow-x-auto">
-        <button class="flex-1 py-2.5 px-4 rounded-lg bg-yellow-500 text-white font-medium text-sm shadow-sm transition">All Order History</button>
-        <button class="flex-1 py-2.5 px-4 rounded-lg text-gray-600 hover:bg-white hover:shadow-sm font-medium text-sm transition">Will come</button>
-        <button class="flex-1 py-2.5 px-4 rounded-lg text-gray-600 hover:bg-white hover:shadow-sm font-medium text-sm transition">Finished</button>
-        <button class="flex-1 py-2.5 px-4 rounded-lg text-gray-600 hover:bg-white hover:shadow-sm font-medium text-sm transition">Canceled</button>
+        <a href="{{ route('member.pemesanan.my', request()->only(['search'])) }}"
+           class="flex-1 py-2.5 px-4 rounded-lg text-center font-medium text-sm transition {{ !request('status') ? 'bg-yellow-500 text-white shadow-sm' : 'text-gray-600 hover:bg-white hover:shadow-sm' }}">
+            All Orders
+        </a>
+        <a href="{{ route('member.pemesanan.my', array_merge(request()->only(['search']), ['status' => 'upcoming'])) }}"
+           class="flex-1 py-2.5 px-4 rounded-lg text-center font-medium text-sm transition {{ request('status') === 'upcoming' ? 'bg-yellow-500 text-white shadow-sm' : 'text-gray-600 hover:bg-white hover:shadow-sm' }}">
+            Upcoming
+        </a>
+        <a href="{{ route('member.pemesanan.my', array_merge(request()->only(['search']), ['status' => 'completed'])) }}"
+           class="flex-1 py-2.5 px-4 rounded-lg text-center font-medium text-sm transition {{ request('status') === 'completed' ? 'bg-yellow-500 text-white shadow-sm' : 'text-gray-600 hover:bg-white hover:shadow-sm' }}">
+            Completed
+        </a>
+        <a href="{{ route('member.pemesanan.my', array_merge(request()->only(['search']), ['status' => 'cancelled'])) }}"
+           class="flex-1 py-2.5 px-4 rounded-lg text-center font-medium text-sm transition {{ request('status') === 'cancelled' ? 'bg-yellow-500 text-white shadow-sm' : 'text-gray-600 hover:bg-white hover:shadow-sm' }}">
+            Cancelled
+        </a>
     </div>
+
+    <!-- Active Filters Info -->
+    @if(request('search') || request('status'))
+    <div class="mb-6 flex flex-wrap items-center gap-2">
+        <span class="text-sm text-gray-600">Active filters:</span>
+        @if(request('search'))
+            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-yellow-100 text-yellow-800">
+                Search: "{{ request('search') }}"
+                <a href="{{ route('member.pemesanan.my', array_merge(request()->only(['status']), [])) }}" class="ml-2 text-yellow-600 hover:text-yellow-800">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </a>
+            </span>
+        @endif
+        @if(request('status'))
+            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-blue-100 text-blue-800">
+                Status: {{ ucfirst(request('status')) }}
+                <a href="{{ route('member.pemesanan.my', array_merge(request()->only(['search']), [])) }}" class="ml-2 text-blue-600 hover:text-blue-800">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </a>
+            </span>
+        @endif
+        <a href="{{ route('member.pemesanan.my') }}" class="text-sm text-gray-500 hover:text-gray-700 underline">Clear all filters</a>
+    </div>
+    @endif
 
     <!-- Booking List -->
     <div class="space-y-6">
@@ -100,11 +154,19 @@
             <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 mb-4">
                 <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
             </div>
-            <h3 class="text-lg font-medium text-gray-900">No bookings found</h3>
-            <p class="text-gray-500 mt-1">You haven't made any room bookings yet.</p>
-            <a href="{{ route('daftarkamar') }}" class="inline-block mt-4 px-6 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition">
-                Book a Room
-            </a>
+            @if(request('search') || request('status'))
+                <h3 class="text-lg font-medium text-gray-900">No matching bookings found</h3>
+                <p class="text-gray-500 mt-1">No bookings match your current search and filter criteria.</p>
+                <a href="{{ route('member.pemesanan.my') }}" class="inline-block mt-4 px-6 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition">
+                    Clear Filters
+                </a>
+            @else
+                <h3 class="text-lg font-medium text-gray-900">No bookings found</h3>
+                <p class="text-gray-500 mt-1">You haven't made any room bookings yet.</p>
+                <a href="{{ route('daftarkamar') }}" class="inline-block mt-4 px-6 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition">
+                    Book a Room
+                </a>
+            @endif
         </div>
         @endforelse
     </div>

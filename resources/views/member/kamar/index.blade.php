@@ -22,8 +22,8 @@
 
 {{-- Room List Content --}}
 <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
-    {{-- Grid Kamar (grid-cols-3) --}}
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+    {{-- Grid Kamar (grid-cols-5) --}}
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
         @forelse($kamars ?? [] as $kamar)
             <div class="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition duration-300 group flex flex-col">
                 {{-- Image --}}
@@ -50,27 +50,27 @@
                 </div>
 
                 {{-- Content --}}
-                <div class="p-8 bg-gray-100/50 flex flex-col flex-grow">
-                    <h3 class="text-2xl font-bold text-gray-900 mb-2">Kamar {{ $kamar->nomor_kamar }}</h3>
-                    <p class="text-gray-500 text-sm line-clamp-2 mb-6 flex-grow">
+                <div class="p-4 bg-gray-100/50 flex flex-col flex-grow">
+                    <h3 class="text-lg font-bold text-gray-900 mb-1">Kamar {{ $kamar->nomor_kamar }}</h3>
+                    <p class="text-gray-500 text-xs line-clamp-2 mb-3 flex-grow">
                         {{ $kamar->deskripsi ?? 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Perfect comfort with our selection of luxury hotel rooms.' }}
                     </p>
 
-                    <div class="flex flex-col gap-1 mb-6">
+                    <div class="flex flex-col gap-1 mb-3">
                         <span class="text-xs font-semibold text-yellow-600 uppercase tracking-wider">Price</span>
-                        <span class="text-xl font-bold text-gray-900">Rp {{ number_format($kamar->tipe->harga_dasar ?? 0, 0, ',', '.') }}</span>
+                        <span class="text-sm font-bold text-gray-900">Rp {{ number_format($kamar->tipe->harga_dasar ?? 0, 0, ',', '.') }}</span>
                     </div>
 
-                    <div class="grid grid-cols-2 gap-4 mt-auto">
-                        <a href="{{ route('member.kamar.show', $kamar) }}" class="px-4 py-3 text-center text-sm font-semibold text-gray-700 border border-gray-300 rounded-xl hover:bg-white hover:border-gray-400 transition">
+                    <div class="grid grid-cols-2 gap-2 mt-auto">
+                        <a href="{{ route('member.kamar.show', $kamar) }}" class="px-2 py-2 text-center text-xs font-semibold text-gray-700 border border-gray-300 rounded-lg hover:bg-white hover:border-gray-400 transition">
                             Detail
                         </a>
                         @if(($kamar->status_ketersediaan ?? 'booked') == 'available')
-                            <button onclick="openBookingModal({{ $kamar->id_kamar }})" class="px-4 py-3 text-center text-sm font-semibold text-white bg-yellow-500 rounded-xl hover:bg-yellow-600 transition shadow-md shadow-yellow-200">
-                                Booking Now
+                            <button onclick="openBookingModal({{ $kamar->id_kamar }})" class="px-2 py-2 text-center text-xs font-semibold text-white bg-yellow-500 rounded-lg hover:bg-yellow-600 transition shadow-md shadow-yellow-200">
+                                Book
                             </button>
                         @else
-                            <button disabled class="px-4 py-3 text-center text-sm font-semibold text-white bg-red-400 rounded-xl cursor-not-allowed opacity-70">
+                            <button disabled class="px-2 py-2 text-center text-xs font-semibold text-white bg-red-400 rounded-lg cursor-not-allowed opacity-70">
                                 Booked
                             </button>
                         @endif
@@ -120,17 +120,14 @@
 </div>
 
 <script>
-    let selectedKamarId = null;
-
     function openBookingModal(kamarId) {
-        selectedKamarId = kamarId;
         const modal = document.getElementById('bookingModal');
         modal.classList.remove('hidden');
         document.body.style.overflow = 'hidden';
 
         // Update Livewire component with selected room
         if (window.livewire) {
-            window.livewire.find('booking-form').set('selectedKamarId', kamarId);
+            window.livewire.find('booking-form').call('setSelectedRoom', kamarId);
         }
     }
 
@@ -138,7 +135,6 @@
         const modal = document.getElementById('bookingModal');
         modal.classList.add('hidden');
         document.body.style.overflow = 'auto';
-        selectedKamarId = null;
     }
 
     // Event listeners

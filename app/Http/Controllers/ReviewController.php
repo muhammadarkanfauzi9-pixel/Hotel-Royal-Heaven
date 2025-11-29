@@ -15,7 +15,12 @@ class ReviewController extends Controller
      */
     public function index()
     {
+        // Get reviews only for rooms where user has completed or cancelled bookings
         $reviews = Review::where('id_user', Auth::id())
+            ->whereHas('kamar.pemesanan', function($query) {
+                $query->where('id_user', Auth::id())
+                      ->whereIn('status_pemesanan', ['completed', 'cancelled']);
+            })
             ->with(['kamar.tipe'])
             ->latest()
             ->paginate(10);
@@ -37,14 +42,14 @@ class ReviewController extends Controller
         $id_kamar = $request->input('id_kamar');
         $id_user = Auth::id();
 
-        // Cek apakah user pernah menyelesaikan pemesanan untuk kamar ini
-        $canReview = Pemesanan::where('id_user', $id_user)
+        // Cek apakah user memiliki pemesanan yang sudah selesai atau dibatalkan untuk kamar ini
+        $hasValidBooking = Pemesanan::where('id_user', $id_user)
             ->where('id_kamar', $id_kamar)
-            ->where('status_pemesanan', 'completed')
+            ->whereIn('status_pemesanan', ['completed', 'cancelled'])
             ->exists();
 
-        if (!$canReview) {
-            return redirect()->back()->with('error', 'Anda hanya dapat mereview kamar yang pemesanannya telah selesai.');
+        if (!$hasValidBooking) {
+            return redirect()->back()->with('error', 'Anda hanya dapat memberikan review untuk pemesanan yang sudah selesai atau dibatalkan.');
         }
 
         // Cek apakah user sudah pernah mereview kamar ini

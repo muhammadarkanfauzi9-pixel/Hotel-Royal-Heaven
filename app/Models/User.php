@@ -77,4 +77,20 @@ class User extends Authenticatable
     {
         return ($this->role ?? '') === 'admin';
     }
+
+    /**
+     * Get the user's full name (accessor for nama_lengkap column)
+     */
+    public function getNameAttribute()
+    {
+        return $this->nama_lengkap;
+    }
+
+    /**
+     * Set the user's full name (mutator for nama_lengkap column)
+     */
+    public function setNameAttribute($value)
+    {
+        $this->attributes['nama_lengkap'] = $value;
+    }
 }

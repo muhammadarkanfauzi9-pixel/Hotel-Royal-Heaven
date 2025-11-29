@@ -121,7 +121,7 @@
                 <button type="submit" class="flex-1 bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200">
                     Lanjutkan Pemesanan
                 </button>
-                <a href="{{ route('member.index') }}" class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-3 px-4 rounded-lg transition-colors duration-200 text-center">
+                <a href="{{ route('member.kamar.index') }}" class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-3 px-4 rounded-lg transition-colors duration-200 text-center">
                     Batal
                 </a>
             </div>

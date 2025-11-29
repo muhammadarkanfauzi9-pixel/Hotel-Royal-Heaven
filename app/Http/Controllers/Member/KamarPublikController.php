@@ -22,8 +22,18 @@ class KamarPublikController extends Controller // <<< Perubahan NAMA CLASS
                                ->limit(4)
                                ->get();
 
+        // Get recent reviews for testimonials section
+        $recent_reviews = \App\Models\Review::with(['user', 'kamar'])
+                                           ->whereHas('user', function($query) {
+                                               $query->where('role', 'member');
+                                           })
+                                           ->latest()
+                                           ->limit(3)
+                                           ->get();
+
         return view('home', [
-            'featured_kamar' => $featured_kamar
+            'featured_kamar' => $featured_kamar,
+            'recent_reviews' => $recent_reviews
         ]);
     }
 
@@ -120,13 +130,9 @@ class KamarPublikController extends Controller // <<< Perubahan NAMA CLASS
         $canReview = false;
         if (Auth::check() && Auth::user()->role === 'member') {
             $userId = Auth::id();
-            $canReview = \App\Models\Pemesanan::where('id_user', $userId)
+            $canReview = !\App\Models\Review::where('id_user', $userId)
                 ->where('id_kamar', $kamar->id_kamar)
-                ->where('status_pemesanan', 'completed')
-                ->exists() &&
-                !\App\Models\Review::where('id_user', $userId)
-                    ->where('id_kamar', $kamar->id_kamar)
-                    ->exists();
+                ->exists();
         }
 
         // Check if room is in user's wishlist

@@ -30,22 +30,7 @@
         <div class="absolute inset-0 bg-black bg-opacity-30 z-5"></div>
     </div>
 
-    {{-- Decorative Elements --}}
-    <div class="absolute top-20 left-10 w-32 h-32 border border-yellow-400 rounded-full opacity-10 animate-pulse"></div>
-    <div class="absolute bottom-20 right-10 w-24 h-24 border border-yellow-400 rounded-full opacity-10 animate-pulse" style="animation-delay: 1s;"></div>
-    <div class="absolute top-1/2 left-1/4 w-16 h-16 bg-yellow-400 rounded-full opacity-5 animate-bounce" style="animation-delay: 2s;"></div>
 
-    {{-- Floating Hearts Animation --}}
-    <div class="absolute top-1/4 right-1/4 text-yellow-400 opacity-20 animate-bounce" style="animation-delay: 0.5s;">
-        <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path>
-        </svg>
-    </div>
-    <div class="absolute bottom-1/4 left-1/3 text-yellow-400 opacity-15 animate-bounce" style="animation-delay: 1.5s;">
-        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path>
-        </svg>
-    </div>
 
     {{-- Content Container --}}
     <div class="relative z-10 max-w-[120rem] mx-auto px-4 sm:px-6 lg:px-8 w-full h-full flex items-center">
@@ -81,22 +66,17 @@
                      </svg>
                  </a>
 
-                 {{-- Secondary CTA --}}
-                 <div class="inline-flex items-center px-8 py-4 border-2 border-white border-opacity-30 text-white font-semibold rounded-full hover:bg-white hover:bg-opacity-10 transition-all duration-300 backdrop-blur-sm">
-                     <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                 {{-- Interactive Secondary CTA --}}
+                 <div class="inline-flex items-center px-8 py-4 border-2 border-white border-opacity-30 text-white font-semibold rounded-full hover:bg-white hover:bg-opacity-10 transition-all duration-300 backdrop-blur-sm cursor-pointer group" onclick="viewWishlist()">
+                     <svg class="w-5 h-5 mr-3 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
                      </svg>
-                     {{ $wishlists->count() ?? 0 }} Favorite Rooms
+                     <span class="group-hover:text-yellow-300 transition-colors">{{ $wishlists->count() ?? 0 }} Favorite Rooms</span>
                  </div>
              </div>
              @endif
         </div>
     </div>
 
-    {{-- Scroll Indicator --}}
-    <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10 animate-bounce">
-        <div class="w-6 h-10 border-2 border-white border-opacity-50 rounded-full flex justify-center">
-            <div class="w-1 h-3 bg-white bg-opacity-50 rounded-full mt-2 animate-pulse"></div>
-        </div>
-    </div>
+
 </section>

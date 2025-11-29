@@ -112,7 +112,7 @@
                                         Nama Lengkap *
                                     </span>
                                 </label>
-                                <input type="text" name="name" id="name" value="{{ old('name', $user->name) }}"
+                                <input type="text" name="name" id="name" value="{{ old('name', $user->name ?? '') }}"
                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-gray-50 focus:bg-white"
                                        placeholder="Masukkan nama lengkap" required>
                                 @error('name')

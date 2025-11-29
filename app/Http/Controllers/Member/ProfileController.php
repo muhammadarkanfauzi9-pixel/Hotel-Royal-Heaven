@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Member;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
@@ -38,15 +39,11 @@ class ProfileController extends Controller
             'profile_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:10240', // 10MB max
         ]);
 
-        // Map 'name' to 'nama_lengkap' for database storage
-        $data['nama_lengkap'] = $data['name'];
-        unset($data['name']);
-
         // Handle profile photo upload
         if ($request->hasFile('profile_photo')) {
             // Delete old profile photo if exists
-            if ($user->profile_photo && \Storage::disk('public')->exists($user->profile_photo)) {
-                \Storage::disk('public')->delete($user->profile_photo);
+            if ($user->profile_photo && Storage::disk('public')->exists($user->profile_photo)) {
+                Storage::disk('public')->delete($user->profile_photo);
             }
 
             // Store new profile photo

@@ -29,10 +29,7 @@
         <div class="absolute inset-0 bg-black bg-opacity-30 z-5"></div>
     </div>
 
-    {{-- Decorative Elements --}}
-    <div class="absolute top-20 left-10 w-32 h-32 border border-yellow-400 rounded-full opacity-10 animate-pulse"></div>
-    <div class="absolute bottom-20 right-10 w-24 h-24 border border-yellow-400 rounded-full opacity-10 animate-pulse" style="animation-delay: 1s;"></div>
-    <div class="absolute top-1/2 left-1/4 w-16 h-16 bg-yellow-400 rounded-full opacity-5 animate-bounce" style="animation-delay: 2s;"></div>
+
 
     {{-- Content Container --}}
     <div class="relative z-10 max-w-[120rem] mx-auto px-4 sm:px-6 lg:px-8 w-full h-full flex items-center">
@@ -113,10 +110,5 @@
         </div>
     </div>
 
-    {{-- Scroll Indicator --}}
-    <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10 animate-bounce">
-        <div class="w-6 h-10 border-2 border-white border-opacity-50 rounded-full flex justify-center">
-            <div class="w-1 h-3 bg-white bg-opacity-50 rounded-full mt-2 animate-pulse"></div>
-        </div>
-    </div>
+
 </section>

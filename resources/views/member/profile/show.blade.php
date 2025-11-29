@@ -3,8 +3,131 @@
 @section('title', 'Profil Saya')
 
 @section('content')
-<div class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 py-12">
+
+{{-- Hero Section --}}
+<section class="relative w-full min-h-[700px] lg:h-screen flex items-center overflow-hidden bg-gradient-to-br from-gray-900 via-gray-800 to-black pt-24 lg:pt-32">
+    {{-- Background with Diagonal Split using Linear Gradient --}}
+    <div class="absolute inset-0 z-0 hidden lg:block parallax"
+         style="background: linear-gradient(105deg, #E3A008 0%, #E3A008 50%, transparent 50.1%, transparent 100%), url('{{ asset('user/lobbyhtl.jpg') }}');
+                background-size: cover;
+                background-position: center;"
+         data-parallax="0.3">
+        {{-- Overlay for better text readability --}}
+        <div class="absolute inset-0 bg-black bg-opacity-5"></div>
+    </div>
+
+    {{-- Mobile Background (Stacked) --}}
+    <div class="absolute inset-0 z-0 lg:hidden">
+        <div class="absolute inset-0 bg-gradient-to-br from-yellow-600 to-yellow-800 opacity-95 z-10"></div>
+        <img src="{{ asset('user/lobbyhtl.jpg') }}" class="absolute inset-0 w-full h-full object-cover opacity-20 z-0" alt="Background">
+        {{-- Mobile overlay --}}
+        <div class="absolute inset-0 bg-black bg-opacity-30 z-5"></div>
+    </div>
+
+    {{-- Decorative Elements --}}
+    <div class="absolute top-20 left-10 w-32 h-32 border border-yellow-400 rounded-full opacity-10 animate-pulse"></div>
+    <div class="absolute bottom-20 right-10 w-24 h-24 border border-yellow-400 rounded-full opacity-10 animate-pulse" style="animation-delay: 1s;"></div>
+    <div class="absolute top-1/2 left-1/4 w-16 h-16 bg-yellow-400 rounded-full opacity-5 animate-bounce" style="animation-delay: 2s;"></div>
+
+    {{-- Content Container --}}
+    <div class="relative z-10 max-w-[120rem] mx-auto px-4 sm:px-6 lg:px-8 w-full h-full flex items-center">
+        {{-- Dynamic Width based on splitPercent for Desktop --}}
+        <div class="w-full lg:w-[50%] py-20 lg:py-0 transform transition-all duration-1000 ease-out">
+             {{-- Subtitle --}}
+             <div class="inline-flex items-center px-4 py-2 bg-white backdrop-blur-sm rounded-full border border-yellow-400 border-opacity-30 mb-6">
+                 <span class="text-sm font-bold tracking-widest uppercase text-yellow-600">
+                     Member Profile
+                 </span>
+                 <div class="w-2 h-2 bg-yellow-600 rounded-full ml-3 animate-pulse"></div>
+             </div>
+
+             {{-- Title --}}
+             <h1 class="max-w-3xl text-4xl md:text-6xl lg:text-7xl font-black leading-tight mb-8 text-white drop-shadow-2xl">
+                 <span class="bg-gradient-to-r from-white via-white to-white bg-clip-text text-transparent">
+                     Welcome Back, {{ Auth::user()->name }}
+                 </span>
+             </h1>
+
+             {{-- Description --}}
+             <p class="text-lg md:text-xl mb-10 text-gray-700 max-w-2xl leading-relaxed font-medium drop-shadow-lg">
+                 Manage your account information, view your booking history, and update your profile details.
+             </p>
+
+             {{-- CTA Button --}}
+             <div class="flex flex-col sm:flex-row gap-4">
+                 <a href="#profile-content" class="group inline-flex items-center px-8 py-4 bg-white hover:from-yellow-600 hover:to-yellow-700 text-black font-bold rounded-full transition-all duration-300 shadow-2xl shadow-yellow-500/30 hover:shadow-yellow-500/50 transform hover:-translate-y-1 hover:scale-105">
+                     <span class="mr-3">View Profile</span>
+                     <svg class="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                     </svg>
+                 </a>
+             </div>
+        </div>
+    </div>
+
+    {{-- Scroll Indicator --}}
+    <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10 animate-bounce">
+        <div class="w-6 h-10 border-2 border-white border-opacity-50 rounded-full flex justify-center">
+            <div class="w-1 h-3 bg-white bg-opacity-50 rounded-full mt-2 animate-pulse"></div>
+        </div>
+    </div>
+</section>
+
+<div class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 py-12" id="profile-content">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        {{-- Success Notification --}}
+        @if(session('success'))
+        <div class="mb-6 bg-green-50 border border-green-200 rounded-xl p-4">
+            <div class="flex items-center">
+                <div class="flex-shrink-0">
+                    <svg class="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                    </svg>
+                </div>
+                <div class="ml-3">
+                    <p class="text-sm font-medium text-green-800">{{ session('success') }}</p>
+                </div>
+                <div class="ml-auto pl-3">
+                    <div class="-mx-1.5 -my-1.5">
+                        <button type="button" class="inline-flex bg-green-50 rounded-md p-1.5 text-green-500 hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-green-50 focus:ring-green-600">
+                            <span class="sr-only">Dismiss</span>
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 011.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @endif
+
+        {{-- Error Notification --}}
+        @if(session('error'))
+        <div class="mb-6 bg-red-50 border border-red-200 rounded-xl p-4">
+            <div class="flex items-center">
+                <div class="flex-shrink-0">
+                    <svg class="w-5 h-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+                    </svg>
+                </div>
+                <div class="ml-3">
+                    <p class="text-sm font-medium text-red-800">{{ session('error') }}</p>
+                </div>
+                <div class="ml-auto pl-3">
+                    <div class="-mx-1.5 -my-1.5">
+                        <button type="button" class="inline-flex bg-red-50 rounded-md p-1.5 text-red-500 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-red-50 focus:ring-red-600">
+                            <span class="sr-only">Dismiss</span>
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 011.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @endif
+
         <!-- Header Section -->
         <div class="bg-white rounded-2xl shadow-xl overflow-hidden mb-8">
             <div class="bg-gradient-to-r from-blue-600 to-indigo-600 px-8 py-6">

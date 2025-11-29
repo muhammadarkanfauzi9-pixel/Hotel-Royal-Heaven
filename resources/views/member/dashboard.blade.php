@@ -129,6 +129,75 @@
         </div>
     </div>
 
+    <!-- Recent Activities -->
+    <div class="bg-white rounded-lg shadow-md p-6 mt-8">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-lg font-semibold text-gray-900">Recent Activities</h3>
+            <span class="text-sm text-gray-500">Last 30 days</span>
+        </div>
+        <div class="space-y-4">
+            <div class="flex items-center p-3 bg-gray-50 rounded-lg">
+                <div class="bg-blue-100 rounded-full p-2 mr-3">
+                    <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <div class="flex-1">
+                    <p class="text-sm font-medium text-gray-900">Booking Confirmed</p>
+                    <p class="text-xs text-gray-600">Your booking for Deluxe Room has been confirmed</p>
+                </div>
+                <span class="text-xs text-gray-500">2 days ago</span>
+            </div>
+
+            <div class="flex items-center p-3 bg-gray-50 rounded-lg">
+                <div class="bg-green-100 rounded-full p-2 mr-3">
+                    <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path>
+                    </svg>
+                </div>
+                <div class="flex-1">
+                    <p class="text-sm font-medium text-gray-900">Review Submitted</p>
+                    <p class="text-xs text-gray-600">You left a 5-star review for Suite Room</p>
+                </div>
+                <span class="text-xs text-gray-500">1 week ago</span>
+            </div>
+
+            <div class="flex items-center p-3 bg-gray-50 rounded-lg">
+                <div class="bg-purple-100 rounded-full p-2 mr-3">
+                    <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                    </svg>
+                </div>
+                <div class="flex-1">
+                    <p class="text-sm font-medium text-gray-900">Added to Wishlist</p>
+                    <p class="text-xs text-gray-600">Presidential Suite added to your wishlist</p>
+                </div>
+                <span class="text-xs text-gray-500">2 weeks ago</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Special Offers -->
+    <div class="bg-gradient-to-r from-yellow-400 to-yellow-500 rounded-lg shadow-md p-6 mt-8">
+        <div class="flex items-center justify-between">
+            <div>
+                <h3 class="text-lg font-semibold text-white mb-2">Exclusive Member Offer</h3>
+                <p class="text-yellow-100 text-sm mb-4">Get 20% off on your next booking! Use code MEMBER20 at checkout.</p>
+                <div class="flex items-center text-xs text-white">
+                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    Valid until December 31, 2024
+                </div>
+            </div>
+            <div class="hidden md:block">
+                <svg class="w-16 h-16 text-yellow-200" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.293l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13a1 1 0 102 0V9.414l1.293 1.293a1 1 0 001.414-1.414z" clip-rule="evenodd"></path>
+                </svg>
+            </div>
+        </div>
+    </div>
+
     <!-- Quick Actions -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
         <!-- Menu: Daftar Kamar -->

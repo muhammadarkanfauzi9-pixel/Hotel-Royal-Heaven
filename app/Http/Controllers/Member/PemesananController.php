@@ -8,14 +8,48 @@ use App\Models\Kamar;
 use App\Models\Review;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Mail;
 
 class PemesananController extends Controller
 {
     // Member's bookings
-    public function myBookings()
+    public function myBookings(Request $request)
     {
         $user = Auth::user();
-        $pemesanan = $user->pemesanan()->with('kamar')->latest('tgl_pemesanan')->paginate(10);
+        $query = $user->pemesanan()->with('kamar');
+
+        // Search functionality
+        if ($request->has('search') && !empty($request->search)) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('kode_pemesanan', 'like', '%' . $search . '%')
+                  ->orWhere('nama_pemesan', 'like', '%' . $search . '%')
+                  ->orWhereHas('kamar', function($kamarQuery) use ($search) {
+                      $kamarQuery->where('nomor_kamar', 'like', '%' . $search . '%')
+                                ->orWhereHas('tipe', function($tipeQuery) use ($search) {
+                                    $tipeQuery->where('nama_tipe', 'like', '%' . $search . '%');
+                                });
+                  });
+            });
+        }
+
+        // Filter by status
+        if ($request->has('status') && !empty($request->status)) {
+            $status = $request->status;
+            if ($status === 'upcoming') {
+                $query->where('status_pemesanan', 'confirmed')
+                      ->where('tgl_check_in', '>', now());
+            } elseif ($status === 'completed') {
+                $query->where('status_pemesanan', 'completed');
+            } elseif ($status === 'cancelled') {
+                $query->where('status_pemesanan', 'cancelled');
+            } elseif ($status === 'pending') {
+                $query->where('status_pemesanan', 'pending');
+            }
+        }
+
+        $pemesanan = $query->latest('tgl_pemesanan')->paginate(10)->withQueryString();
 
         // Get IDs of rooms that the user has already reviewed
         $reviewedKamarIds = Review::where('id_user', $user->id)
@@ -47,7 +81,9 @@ class PemesananController extends Controller
         $total_malam = $tgl_check_out->diff($tgl_check_in)->days;
         $total_harga = $total_malam * ($kamar->tipe->harga_dasar ?? 0);
 
+        // Update user profile with booking information
         $user->update([
+            'nama_lengkap' => $data['nama'],
             'nik' => $data['nik'],
             'nohp' => $data['nohp'],
         ]);
